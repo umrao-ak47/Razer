@@ -1,0 +1,3 @@
+[submodule "Razer/external/spdlog"]
+	path = Razer/external/spdlog
+	url = https://github.com/gabime/spdlog
