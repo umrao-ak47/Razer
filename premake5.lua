@@ -9,6 +9,59 @@ workspace "Razer"
 	}
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/"
+IncludeDir = {}
+IncludeDir["GLFW"] = "Razer/external/GLFW/include"
+IncludeDir["Glad"] = "Razer/external/Glad/include"
+
+include "Razer/external/Glad"
+
+project "GLFW"
+	location "Razer/external/GLFW"
+	kind "StaticLib"
+	language "C"
+
+	targetdir ("bin/" .. outputdir .. "%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "%{prj.name}")
+
+	files
+	{
+		'%{prj.location}/include/GLFW/glfw3.h',
+		'%{prj.location}/include/GLFW/glfw3native.h',
+		'%{prj.location}/src/context.c',
+		'%{prj.location}/src/init.c',
+		'%{prj.location}/src/input.c',
+		'%{prj.location}/src/monitor.c',
+		'%{prj.location}/src/vulkan.c',
+		'%{prj.location}/src/window.c'
+	}
+
+	filter "system:windows"
+		buildoptions { "-std=c11", "-lgdi32" }
+		systemversion "latest"
+		staticruntime "On"
+
+		files
+		{
+			'%{prj.location}/src/win32_init.c',
+			'%{prj.location}/src/win32_joystick.c',
+			'%{prj.location}/src/win32_monitor.c',
+			'%{prj.location}/src/win32_time.c',
+			'%{prj.location}/src/win32_thread.c',
+			'%{prj.location}/src/win32_window.c',
+			'%{prj.location}/src/wgl_context.c',
+			'%{prj.location}/src/egl_context.c',
+			'%{prj.location}/src/osmesa_context.c'
+		}
+
+		defines
+		{
+			"_GLFW_WIN32",
+			"_CRT_SECURE_NO_WARNINGS"
+		}
+
+		filter { "system:windows", "configurations:Release"}
+			buildoptions "/MT"
+
 
 project "Razer"
 	location "Razer"
@@ -18,6 +71,9 @@ project "Razer"
 	targetdir ("bin/" .. outputdir .. "%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "%{prj.name}")
 
+	pchheader "RZPCH.h"
+	pchsource "Razer/src/Razer/RZPCH.cpp"
+
 	files
 	{
 		"%{prj.name}/src/**.h",
@@ -26,12 +82,22 @@ project "Razer"
 
 	includedirs
 	{
-		"%{prj.name}/external/spdlog/include"
+		"%{prj.name}/src",
+		"%{prj.name}/external/spdlog/include",
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}"
+	}
+
+	links
+	{
+		"GLFW",
+		"Glad",
+		"opengl32.lib"
 	}
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "On"
+		staticruntime "Off"
 		systemversion "latest"
 
 		defines
@@ -84,7 +150,7 @@ project "Sandbox"
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "On"
+		staticruntime "Off"
 		systemversion "latest"
 
 		defines

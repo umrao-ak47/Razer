@@ -1,3 +1,6 @@
 [submodule "Razer/external/spdlog"]
 	path = Razer/external/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "Razer/external/GLFW"]
+	path = Razer/external/GLFW
+	url = https://github.com/glfw/glfw

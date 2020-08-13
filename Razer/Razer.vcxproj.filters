@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Razer">
       <UniqueIdentifier>{A91E020E-1533-2ABF-DEB4-CD1E4A8826F0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Razer\Events">
+      <UniqueIdentifier>{6D929F71-59F5-2E16-027B-67CCEEBCFA98}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razer.h" />
     <ClInclude Include="src\Razer\Application.h">
       <Filter>Razer</Filter>
@@ -16,15 +28,51 @@
     <ClInclude Include="src\Razer\EntryPoint.h">
       <Filter>Razer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razer\Events\ApplicationEvent.h">
+      <Filter>Razer\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razer\Events\Event.h">
+      <Filter>Razer\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razer\Events\KeyEvent.h">
+      <Filter>Razer\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razer\Events\MouseEvent.h">
+      <Filter>Razer\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razer\Layer.h">
+      <Filter>Razer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razer\LayerStack.h">
+      <Filter>Razer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Razer\Log.h">
+      <Filter>Razer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razer\RZPCH.h">
+      <Filter>Razer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Razer\Window.h">
       <Filter>Razer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
     <ClCompile Include="src\Razer\Application.cpp">
       <Filter>Razer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Razer\Layer.cpp">
+      <Filter>Razer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razer\LayerStack.cpp">
+      <Filter>Razer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Razer\Log.cpp">
+      <Filter>Razer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razer\RZPCH.cpp">
       <Filter>Razer</Filter>
     </ClCompile>
   </ItemGroup>
