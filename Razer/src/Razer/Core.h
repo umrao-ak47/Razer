@@ -1,10 +1,14 @@
 #pragma once
 
 #ifdef RZ_PLATFORM_WINDOWS
-	#ifdef RZ_BUILD_DLL
-		#define RZAPI __declspec(dllexport)
+	#ifdef RZ_DYNAMIC_LINK
+		#ifdef RZ_BUILD_DLL
+			#define RZAPI __declspec(dllexport)
+		#else
+			# define RZAPI __declspec(dllimport)
+		#endif
 	#else
-		# define RZAPI __declspec(dllimport)
+		#define RZAPI
 	#endif
 #else
 	#error Currently supported only Windows

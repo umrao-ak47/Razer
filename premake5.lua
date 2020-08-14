@@ -21,6 +21,7 @@ project "GLFW"
 	location "Razer/external/GLFW"
 	kind "StaticLib"
 	language "C"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "%{prj.name}")
@@ -38,10 +39,7 @@ project "GLFW"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		buildoptions { "-std=c11", "-lgdi32" }
 		systemversion "latest"
-		staticruntime "On"
 
 		files
 		{
@@ -62,13 +60,19 @@ project "GLFW"
 			"_CRT_SECURE_NO_WARNINGS"
 		}
 
-		filter { "system:windows", "configurations:Release"}
-			buildoptions "/MT"
+	filter "configurations:Debug"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		runtime "Release"
+		optimize "on"
 
 project "Imgui"
 	location "Razer/external/imgui"
 	kind "StaticLib"
 	language "C++"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "%{prj.name}")
@@ -88,22 +92,23 @@ project "Imgui"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
 		systemversion "latest"
-		staticruntime "On"
 
-		defines
-		{
-			"_CRT_SECURE_NO_WARNINGS"
-		}
+	filter "configurations:Debug"
+		runtime "Debug"
+		symbols "on"
 
-	filter { "system:windows", "configurations:Release"}
-		buildoptions "/MT"
+	filter "configurations:Release"
+		runtime "Release"
+		optimize "on"
+
 
 project "Razer"
 	location "Razer"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "%{prj.name}")
@@ -115,6 +120,11 @@ project "Razer"
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
+	}
+
+	defines
+	{
+		"_CRT_SECURE_NO_WARNINGS"
 	}
 
 	includedirs
@@ -136,38 +146,35 @@ project "Razer"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "Off"
 		systemversion "latest"
 
 		defines
 		{
 			"RZ_PLATFORM_WINDOWS",
-			"RZ_BUILD_DLL",
 			"GLFW_INCLUDE_NONE"
-		}
-
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/".. outputdir .. "Sandbox")
 		}
 
 	filter "configurations:Debug"
 		defines "RZ_DEBUG"
-		symbols "On"
+		runtime "Debug"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "RZ_RELEASE"
-		optimize "On"
+		runtime "Release"
+		optimize "on"
 
 	filter "configurations:Dist"
 		defines "RZ_DIST"
-		optimize "On"
+		runtime "Release"
+		optimize "on"
 
 project "Sandbox"
 	location "SandBox"
 	kind "ConsoleApp"
 	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "%{prj.name}")
@@ -192,8 +199,6 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "Off"
 		systemversion "latest"
 
 		defines
@@ -203,12 +208,15 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "RZ_DEBUG"
-		symbols "On"
+		runtime "Debug"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "RZ_RELEASE"
-		optimize "On"
+		runtime "Release"
+		optimize "on"
 
 	filter "configurations:Dist"
 		defines "RZ_DIST"
-		optimize "On"
+		runtime "Release"
+		optimize "on"
