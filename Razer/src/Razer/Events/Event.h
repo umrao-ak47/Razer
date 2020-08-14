@@ -26,6 +26,7 @@ namespace rz {
 
 	class RZAPI Event {
 		friend class EventDispatcher;
+		friend std::ostream& operator<<(std::ostream& os, const Event& e);
 	public:
 		virtual EventType GetEventType() const = 0;
 		virtual const char* GetName() const = 0;
@@ -62,6 +63,11 @@ namespace rz {
 	private:
 		Event& m_Event;
 	};
+
+
+	inline std::ostream& operator<<(std::ostream& os, const Event& e) {
+		return os << e.ToString();
+	}
 }
 
 #define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return EventType::##type; }\

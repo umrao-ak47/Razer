@@ -1,6 +1,7 @@
 #include "Razer/RZPCH.h"
 #include "Razer.h"
 
+
 class ExampleLayer : public rz::Layer {
 public:
 	ExampleLayer()

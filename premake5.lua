@@ -13,6 +13,7 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "Razer/external/GLFW/include"
 IncludeDir["Glad"] = "Razer/external/Glad/include"
 IncludeDir["imgui"] = "Razer/external/imgui"
+IncludeDir["glm"] = "Razer/external/glm"
 
 include "Razer/external/Glad"
 
@@ -118,7 +119,8 @@ project "Razer"
 		"%{prj.name}/external/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
-		"%{IncludeDir.imgui}"
+		"%{IncludeDir.imgui}",
+		"%{IncludeDir.glm}"
 	}
 
 	links
@@ -175,7 +177,8 @@ project "Sandbox"
 	includedirs
 	{
 		"Razer/external/spdlog/include",
-		"Razer/src"
+		"Razer/src",
+		"%{IncludeDir.glm}"
 	}
 
 	links
