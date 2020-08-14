@@ -12,6 +12,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/"
 IncludeDir = {}
 IncludeDir["GLFW"] = "Razer/external/GLFW/include"
 IncludeDir["Glad"] = "Razer/external/Glad/include"
+IncludeDir["imgui"] = "Razer/external/imgui"
 
 include "Razer/external/Glad"
 
@@ -36,6 +37,7 @@ project "GLFW"
 	}
 
 	filter "system:windows"
+		cppdialect "C++17"
 		buildoptions { "-std=c11", "-lgdi32" }
 		systemversion "latest"
 		staticruntime "On"
@@ -62,6 +64,36 @@ project "GLFW"
 		filter { "system:windows", "configurations:Release"}
 			buildoptions "/MT"
 
+project "Imgui"
+	location "Razer/external/imgui"
+	kind "StaticLib"
+	language "C++"
+
+	targetdir ("bin/" .. outputdir .. "%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "%{prj.name}")
+
+	files
+	{
+		'%{prj.location}/imconfig.h',
+		'%{prj.location}/imgui.h',
+		'%{prj.location}/imgui_internal.h',
+		'%{prj.location}/imstb_rectpack.h',
+		'%{prj.location}/imstb_textedit.h',
+		'%{prj.location}/imstb_truetype.h',
+		'%{prj.location}/imgui.cpp',
+		'%{prj.location}/imgui_demo.cpp',
+		'%{prj.location}/imgui_draw.cpp',
+		'%{prj.location}/imgui_widgets.cpp'
+
+	}
+
+	filter "system:windows"
+		cppdialect "C++17"
+		systemversion "latest"
+		staticruntime "On"
+
+		filter { "system:windows", "configurations:Release"}
+			buildoptions "/MT"
 
 project "Razer"
 	location "Razer"
@@ -85,13 +117,15 @@ project "Razer"
 		"%{prj.name}/src",
 		"%{prj.name}/external/spdlog/include",
 		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.Glad}"
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.imgui}"
 	}
 
 	links
 	{
 		"GLFW",
 		"Glad",
+		"Imgui",
 		"opengl32.lib"
 	}
 
@@ -104,6 +138,7 @@ project "Razer"
 		{
 			"RZ_PLATFORM_WINDOWS",
 			"RZ_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
 		}
 
 		postbuildcommands

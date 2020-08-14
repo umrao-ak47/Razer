@@ -17,6 +17,22 @@ namespace rz {
 		int m_KeyCode;
 	};
 
+	class RZAPI KeyTypeEvent : public KeyEvent {
+	public:
+		KeyTypeEvent(int keyCode)
+			: KeyEvent(keyCode) {}
+
+		static EventType GetStaticType() { return EventType::KeyType; }
+		virtual EventType GetEventType() const override { return GetStaticType(); }
+		virtual const char* GetName() const override { return "KeyType"; }
+
+		virtual std::string ToString() const override {
+			std::stringstream ss;
+			ss << "KeyType: " << GetKeyCode();
+			return ss.str();
+		}
+	};
+
 
 	class RZAPI KeyPressEvent : public KeyEvent {
 	public:

@@ -4,3 +4,6 @@
 [submodule "Razer/external/GLFW"]
 	path = Razer/external/GLFW
 	url = https://github.com/glfw/glfw
+[submodule "Razer/external/imgui"]
+	path = Razer/external/imgui
+	url = https://github.com/ocornut/imgui

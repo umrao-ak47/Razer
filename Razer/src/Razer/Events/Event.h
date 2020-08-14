@@ -10,7 +10,7 @@ namespace rz {
 		None = 0,
 		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
 		AppTick, AppUpdate, AppRender,
-		KeyPress, KeyRelease,
+		KeyType, KeyPress, KeyRelease,
 		MouseButtonPress, MouseButtonRelease, MouseMove, MouseScroll
 	};
 

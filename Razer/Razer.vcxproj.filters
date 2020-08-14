@@ -4,6 +4,9 @@
     <Filter Include="Platform">
       <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform\OpenGL">
+      <UniqueIdentifier>{1E7D2C1D-8A08-9AE1-9319-1DD6FF23F6E1}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Platform\Windows">
       <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
     </Filter>
@@ -13,8 +16,14 @@
     <Filter Include="Razer\Events">
       <UniqueIdentifier>{6D929F71-59F5-2E16-027B-67CCEEBCFA98}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Razer\imgui">
+      <UniqueIdentifier>{D3C61EA1-3F7C-9796-C870-916D34258E9A}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\OpenGL\ImguiRenderer.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
@@ -55,8 +64,14 @@
     <ClInclude Include="src\Razer\Window.h">
       <Filter>Razer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Razer\imgui\ImguiLayer.h">
+      <Filter>Razer\imgui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\OpenGL\ImguiRenderer.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
       <Filter>Platform\Windows</Filter>
     </ClCompile>
@@ -74,6 +89,9 @@
     </ClCompile>
     <ClCompile Include="src\Razer\RZPCH.cpp">
       <Filter>Razer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Razer\imgui\ImguiLayer.cpp">
+      <Filter>Razer\imgui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

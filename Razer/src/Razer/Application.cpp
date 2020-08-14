@@ -6,11 +6,17 @@
 #include "Events/MouseEvent.h"
 #include "Log.h"
 
-#include <GLFW/glfw3.h>
+#include <glad/glad.h>
+
 
 namespace rz {
+	Application* Application::s_Instance = nullptr;
+
 	Application::Application()
 	: m_Running(true) {
+		RZ_CORE_ASSERT(s_Instance, "Application Already exists");
+		s_Instance = this;
+
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 	}
@@ -20,10 +26,10 @@ namespace rz {
 	}
 
 	void Application::OnEvent(Event& e) {
+		RZ_CORE_TRACE("Application:: {0}", e.ToString());
+
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(std::bind(&Application::OnWindowClose, this, std::placeholders::_1));
-		
-		RZ_CORE_TRACE(e.ToString());
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); ) {
 			(*(--it))->OnEvent(e);
@@ -43,15 +49,18 @@ namespace rz {
 			}
 
 			m_Window->OnUpdate();
+			RZ_CORE_INFO("Window:: Update");
 		}
 	}
 
 	void Application::PushLayer(Layer* layer) {
 		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
 	}
 
 	void Application::PushOverlay(Layer* overlay) {
 		m_LayerStack.PushOverlay(overlay);
+		overlay->OnAttach();
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& e) {

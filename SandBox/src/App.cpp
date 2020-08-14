@@ -7,11 +7,11 @@ public:
 		: rz::Layer("Example") {}
 
 	void OnUpdate() override {
-		RZ_INFO("ExampleLayer::Update");
+		RZ_INFO("ExampleLayer:: Update");
 	}
 
 	void OnEvent(rz::Event& e) override {
-		RZ_TRACE(e.ToString());
+		RZ_TRACE("ExampleLayer:: {0}", e.ToString());
 	}
 
 };
@@ -20,6 +20,7 @@ class App : public rz::Application {
 public:
 	App() {
 		PushLayer(new ExampleLayer());
+		PushOverlay(new rz::ImguiLayer());
 	}
 	~App() {
 

@@ -23,6 +23,8 @@ namespace rz {
 			return ss.str();
 		}
 
+		unsigned int GetWidth() const { return m_Width; }
+		unsigned int GetHeight() const { return m_Height; }
 	private:
 		unsigned int m_Width;
 		unsigned int m_Height;

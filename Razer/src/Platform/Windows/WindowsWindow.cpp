@@ -2,6 +2,8 @@
 #include "WindowsWindow.h"
 #include "Razer/Log.h"
 
+#include  <glad/glad.h>
+
 namespace rz {
 	static bool s_GLFWinitiaized = false;
 
@@ -37,6 +39,8 @@ namespace rz {
 
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, props.Title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(m_Window);
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		RZ_CORE_ASSERT(status, "Failed to initialize Glad");
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 
@@ -57,6 +61,14 @@ namespace rz {
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 				WindowCloseEvent event;
+				data.EventCallback(event);
+			}
+		);
+
+		glfwSetCharCallback(m_Window,
+			[](GLFWwindow* window, unsigned int keycode) {
+				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+				KeyTypeEvent event(keycode);
 				data.EventCallback(event);
 			}
 		);

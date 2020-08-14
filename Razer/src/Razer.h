@@ -4,6 +4,7 @@
 
 #include "Razer/Application.h"
 #include "Razer/Layer.h"
+#include "Razer/imgui/ImguiLayer.h"
 #include "Razer/Log.h"
 
 // --------Entry Point----------
