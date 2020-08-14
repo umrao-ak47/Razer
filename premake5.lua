@@ -85,7 +85,6 @@ project "Imgui"
 		'%{prj.location}/imgui_demo.cpp',
 		'%{prj.location}/imgui_draw.cpp',
 		'%{prj.location}/imgui_widgets.cpp'
-
 	}
 
 	filter "system:windows"
@@ -93,8 +92,13 @@ project "Imgui"
 		systemversion "latest"
 		staticruntime "On"
 
-		filter { "system:windows", "configurations:Release"}
-			buildoptions "/MT"
+		defines
+		{
+			"_CRT_SECURE_NO_WARNINGS"
+		}
+
+	filter { "system:windows", "configurations:Release"}
+		buildoptions "/MT"
 
 project "Razer"
 	location "Razer"
@@ -110,7 +114,7 @@ project "Razer"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
 	}
 
 	includedirs
@@ -178,6 +182,7 @@ project "Sandbox"
 	{
 		"Razer/external/spdlog/include",
 		"Razer/src",
+		"%{IncludeDir.imgui}",
 		"%{IncludeDir.glm}"
 	}
 

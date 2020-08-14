@@ -19,6 +19,6 @@ namespace rz {
 		Stack::iterator end() { return m_Layers.end(); }
 	private:
 		Stack m_Layers;
-		Stack::iterator m_LayerInsert;
+		unsigned int m_LayerInsertIndex;
 	};
 }

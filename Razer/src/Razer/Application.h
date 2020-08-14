@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Core.h"
-#include "Window.h"
-#include "LayerStack.h"
+#include "Razer/Core.h"
+#include "Razer/Window.h"
+#include "Razer/LayerStack.h"
+#include "Razer/imgui/ImguiLayer.h"
 
 namespace rz {
 	class RZAPI Application
@@ -24,6 +25,7 @@ namespace rz {
 		bool OnWindowClose(WindowCloseEvent& e);
 
 	private:
+		ImguiLayer* m_ImguiLayer;
 		std::unique_ptr<Window> m_Window;
 		bool m_Running;
 		LayerStack m_LayerStack;

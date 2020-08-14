@@ -16,17 +16,10 @@ namespace rz {
 		void OnAttach() override;
 		void OnDetach() override;
 
-		void OnUpdate() override;
-		void OnEvent(Event& event) override;
-	private:
-		bool OnMouseButtonPressEvent(MouseButtonPressEvent& event);
-		bool OnMouseButtonReleaseEvent(MouseButtonReleaseEvent& event);
-		bool OnMouseScrollEvent(MouseScrollEvent& event);
-		bool OnMouseMoveEvent(MouseMoveEvent& event);
-		bool OnKeyPressEvent(KeyPressEvent& event);
-		bool OnKeyReleaseEvent(KeyReleaseEvent& event);
-		bool OnKeyTypeEvent(KeyTypeEvent& event);
-		bool OnWindowResizeEvent(WindowResizeEvent& event);
+		void OnImguiRender() override;
+
+		void Begin();
+		void End();
 	private:
 		float m_Time;
 	};

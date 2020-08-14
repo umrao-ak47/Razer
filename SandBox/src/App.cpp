@@ -8,14 +8,18 @@ public:
 		: rz::Layer("Example") {}
 
 	void OnUpdate() override {
-		RZ_INFO("ExampleLayer:: Update");
+		//RZ_INFO("ExampleLayer:: Update");
 		if (rz::Input::IsKeyPressed(RZ_KEY_TAB)) {
 			RZ_WARN("TAB Key Pressed");
 		}
 	}
 
+	void OnImguiRender() override {
+		//ImGui::Text("Hello World");
+	}
+
 	void OnEvent(rz::Event& e) override {
-		RZ_TRACE("ExampleLayer:: {0}", e.ToString());
+		//RZ_TRACE("ExampleLayer:: {0}", e.ToString());
 	}
 
 };
@@ -24,7 +28,6 @@ class App : public rz::Application {
 public:
 	App() {
 		PushLayer(new ExampleLayer());
-		PushOverlay(new rz::ImguiLayer());
 	}
 	~App() {
 
