@@ -1,11 +1,11 @@
 #include "RZPCH.h"
 #include "Application.h"
 
-#include "Events/ApplicationEvent.h"
-#include "Events/KeyEvent.h"
-#include "Events/MouseEvent.h"
-#include "Log.h"
-
+#include "Razer/Events/ApplicationEvent.h"
+#include "Razer/Events/KeyEvent.h"
+#include "Razer/Events/MouseEvent.h"
+#include "Razer/Log.h"
+#include "Razer/Input.h"
 #include <glad/glad.h>
 
 
@@ -47,6 +47,10 @@ namespace rz {
 			for (Layer* layer : m_LayerStack) {
 				layer->OnUpdate();
 			}
+
+			float x = Input::GetMouseX();
+			float y = Input::GetMouseY();
+			RZ_CORE_TRACE("{0}, {1}", x, y);
 
 			m_Window->OnUpdate();
 			RZ_CORE_INFO("Window:: Update");

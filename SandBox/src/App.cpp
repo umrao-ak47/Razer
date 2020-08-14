@@ -8,6 +8,9 @@ public:
 
 	void OnUpdate() override {
 		RZ_INFO("ExampleLayer:: Update");
+		if (rz::Input::IsKeyPressed(RZ_KEY_TAB)) {
+			RZ_WARN("TAB Key Pressed");
+		}
 	}
 
 	void OnEvent(rz::Event& e) override {

@@ -18,6 +18,8 @@ namespace rz {
 		void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
 		void SetVSync(bool enabled) override;
 		virtual bool IsVSync() const override { return m_Data.VSync; }
+
+		void* GetNativeWindow() const override { return m_Window; }
 	private:
 		virtual void Init(const WindowProps& props);
 		virtual void ShutDown();
