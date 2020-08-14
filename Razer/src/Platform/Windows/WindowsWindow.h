@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Razer/Window.h"
+#include "Razer/Renderer/RenderContext.h"
 #include <GLFW/glfw3.h>
 
 namespace rz {
@@ -26,6 +27,7 @@ namespace rz {
 
 	private:
 		GLFWwindow* m_Window;
+		RenderContext* m_Context;
 
 		struct WindowData {
 			std::string Title;

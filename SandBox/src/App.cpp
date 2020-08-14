@@ -1,6 +1,7 @@
 #include "Razer/RZPCH.h"
 #include "Razer.h"
 
+#include "imgui.h"
 
 class ExampleLayer : public rz::Layer {
 public:
@@ -15,7 +16,9 @@ public:
 	}
 
 	void OnImguiRender() override {
-		//ImGui::Text("Hello World");
+		ImGui::Begin("Test");
+		ImGui::Text("Hello World");
+		ImGui::End();
 	}
 
 	void OnEvent(rz::Event& e) override {
