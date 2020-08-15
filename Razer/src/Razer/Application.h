@@ -4,9 +4,6 @@
 #include "Razer/Window.h"
 #include "Razer/LayerStack.h"
 #include "Razer/imgui/ImguiLayer.h"
-#include "Razer/Renderer/Array.h"
-#include "Razer/Renderer/Shader.h"
-#include "Razer/Renderer/Buffer.h"
 
 namespace rz {
 	class RZAPI Application
@@ -32,12 +29,6 @@ namespace rz {
 		std::unique_ptr<Window> m_Window;
 		bool m_Running;
 		LayerStack m_LayerStack;
-
-		std::shared_ptr<VertexArray> m_VertexArray;
-		std::shared_ptr<Shader> m_Shader;
-
-		std::shared_ptr<VertexArray> m_SquareVA;
-		std::shared_ptr<Shader> m_SquareShader;
 
 		static Application* s_Instance;
 	};
