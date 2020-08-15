@@ -4,6 +4,7 @@
 #include "Razer/Window.h"
 #include "Razer/LayerStack.h"
 #include "Razer/imgui/ImguiLayer.h"
+#include "Razer/Renderer/Array.h"
 #include "Razer/Renderer/Shader.h"
 #include "Razer/Renderer/Buffer.h"
 
@@ -32,10 +33,11 @@ namespace rz {
 		bool m_Running;
 		LayerStack m_LayerStack;
 
-		unsigned int m_VertexArray;
-		std::unique_ptr<VertexBuffer> m_VertexBuffer;
-		std::unique_ptr<IndexBuffer> m_IndexBuffer;
-		std::unique_ptr<Shader> m_Shader;
+		std::shared_ptr<VertexArray> m_VertexArray;
+		std::shared_ptr<Shader> m_Shader;
+
+		std::shared_ptr<VertexArray> m_SquareVA;
+		std::shared_ptr<Shader> m_SquareShader;
 
 		static Application* s_Instance;
 	};

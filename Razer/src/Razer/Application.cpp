@@ -12,31 +12,6 @@
 namespace rz {
 	Application* Application::s_Instance = nullptr;
 
-	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type) {
-		switch (type) {
-			case ShaderDataType::None:        return GL_NONE;
-			case ShaderDataType::BOOL:        return GL_BOOL;
-			case ShaderDataType::CHAR:        return GL_BYTE;
-			case ShaderDataType::UINT:        return GL_UNSIGNED_INT;
-			case ShaderDataType::UINT2:       return GL_UNSIGNED_INT;
-			case ShaderDataType::UINT3:       return GL_UNSIGNED_INT;
-			case ShaderDataType::UINT4:       return GL_UNSIGNED_INT;
-			case ShaderDataType::INT:         return GL_INT;
-			case ShaderDataType::INT2:        return GL_INT;
-			case ShaderDataType::INT3:        return GL_INT;
-			case ShaderDataType::INT4:        return GL_INT;
-			case ShaderDataType::FLOAT:       return GL_FLOAT;
-			case ShaderDataType::FLOAT2:      return GL_FLOAT;
-			case ShaderDataType::FLOAT3:      return GL_FLOAT;
-			case ShaderDataType::FLOAT4:      return GL_FLOAT;
-			case ShaderDataType::MAT2:        return GL_FLOAT;
-			case ShaderDataType::MAT3:        return GL_FLOAT;
-			case ShaderDataType::MAT4:        return GL_FLOAT;
-		}
-		RZ_CORE_ASSERT(false, "Unknown Shader Data Type");
-		return 0;
-	}
-
 	Application::Application()
 	: m_Running(true) {
 		RZ_CORE_ASSERT(s_Instance, "Application Already exists");
@@ -48,8 +23,7 @@ namespace rz {
 		m_ImguiLayer = new ImguiLayer();
 		PushOverlay(m_ImguiLayer);
 
-		glGenVertexArrays(1, &m_VertexArray);
-		glBindVertexArray(m_VertexArray);
+		m_VertexArray = std::shared_ptr<VertexArray>(VertexArray::Create());
 
 		float vertices[] = {
 			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
@@ -57,7 +31,7 @@ namespace rz {
 			0.0f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
 		};
 
-		m_VertexBuffer = std::unique_ptr<VertexBuffer>(VertexBuffer::Create(vertices, sizeof(vertices)));
+		std::shared_ptr<VertexBuffer> vertexBuffer = std::shared_ptr<VertexBuffer>(VertexBuffer::Create(vertices, sizeof(vertices)));
 		{
 			BufferLayout layout = {
 			{ShaderDataType::FLOAT3, "a_Position"},
@@ -65,20 +39,15 @@ namespace rz {
 			//{ShaderDataType::FLOAT3, "a_Normal"}
 			};
 
-			m_VertexBuffer->SetLayout(layout);
-		}
-		auto& layout = m_VertexBuffer->GetLayout();
-		unsigned int index = 0;
-		for (const auto& element : layout) {
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index, element.Count, ShaderDataTypeToOpenGLBaseType(element.Type), 
-				(element.Normalized ? GL_TRUE : GL_FALSE), layout.GetStride(), (const void*)element.Offset);
-			index++;
+			vertexBuffer->SetLayout(layout);
 		}
 
+		m_VertexArray->AddVertexBuffer(vertexBuffer);
+
 		unsigned int indices[3] = { 0, 1, 2 };
-		m_IndexBuffer = std::unique_ptr<IndexBuffer>(IndexBuffer::Create(indices, 3));
-		
+		std::shared_ptr<IndexBuffer> indexBuffer = std::shared_ptr<IndexBuffer>(IndexBuffer::Create(indices, sizeof(indices)/sizeof(unsigned int)));
+		m_VertexArray->SetIndexBuffer(indexBuffer);
+
 		// shader code
 		std::string vertSrc = R"(
 			#version 410 core
@@ -108,8 +77,52 @@ namespace rz {
 			}
 		)";
 
+		m_Shader = std::shared_ptr<Shader>(Shader::Create(vertSrc, fragSrc));
 
-		m_Shader = std::unique_ptr<Shader>(Shader::Create(vertSrc, fragSrc));
+		m_SquareVA = std::shared_ptr<VertexArray>(VertexArray::Create());
+		float squareVertices[] = {
+			-0.5f, -0.5f, 0.0f,
+			0.5f, -0.5f, 0.0f,
+			0.5f, 0.5f, 0.0f,
+			-0.5f, 0.5f, 0.0f,
+		};
+
+		std::shared_ptr<VertexBuffer> squareVB = std::shared_ptr<VertexBuffer>(VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+		{
+			BufferLayout layout = {
+				{ShaderDataType::FLOAT3, "a_Position"}
+			};
+
+			squareVB->SetLayout(layout);
+		}
+
+		m_SquareVA->AddVertexBuffer(squareVB);
+
+		unsigned int squareIndices[] = { 0, 1, 2, 2, 3, 0 };
+		std::shared_ptr<IndexBuffer> squareIB = std::shared_ptr<IndexBuffer>(IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(unsigned int)));
+		m_SquareVA->SetIndexBuffer(squareIB);
+
+		// shader code
+		std::string squareVertSrc = R"(
+			#version 410 core
+			
+			layout(location=0) in vec3 a_Position;
+			
+			void main(){
+				gl_Position = vec4(a_Position, 1.0);
+			}
+		)";
+
+		std::string squareFragSrc = R"(
+			#version 410 core
+			
+			layout(location=0) out vec4 o_Color;
+			
+			void main(){
+				o_Color = vec4(0.3f, 0.3f, 0.8f, 1.0f);
+			}
+		)";
+		m_SquareShader = std::shared_ptr<Shader>(Shader::Create(squareVertSrc, squareFragSrc));
 	}
 
 	Application::~Application() {
@@ -135,9 +148,13 @@ namespace rz {
 			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
 
+			m_SquareShader->Bind();
+			m_SquareVA->Bind();
+			glDrawElements(GL_TRIANGLES, m_SquareVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+
 			m_Shader->Bind();
-			glBindVertexArray(m_VertexArray);
-			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+			m_VertexArray->Bind();
+			glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 			for (Layer* layer : m_LayerStack) {
 				layer->OnUpdate();
