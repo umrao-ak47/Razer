@@ -1,18 +1,18 @@
 #pragma once
 
 #include "Razer/Core.h"
+#include "Razer/Renderer/Array.h"
+#include "Razer/Renderer/RenderAPI.h"
+#include "Razer/Renderer/RendererCommand.h"
 
 namespace rz {
-	enum RZAPI class RenderAPI {
-		None = 0,
-		OpenGL = 1
-	};
-
 	class RZAPI Renderer {
 	public:
-		static RenderAPI GetAPI() { return s_RenderAPI; }
-		static void SetAPI(RenderAPI api) { s_RenderAPI = api;  }
-	private:
-		static RenderAPI s_RenderAPI;
+		static void BeginScene();
+		static void EndScene();
+
+		static void Submit(std::shared_ptr<VertexArray>& vertexArray);
+
+		static RenderAPI::API GetAPI() { return RenderAPI::GetAPI(); }
 	};
 }

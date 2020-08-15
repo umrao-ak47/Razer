@@ -14,13 +14,13 @@ namespace rz {
     VertexBuffer* rz::VertexBuffer::Create(const float* vertices, unsigned int size)
     {
         switch (Renderer::GetAPI()) {
-            case RenderAPI::None: 
+            case RenderAPI::API::None: 
             {
                 RZ_CORE_ASSERT(false, "NO Render API selected");
                 break;
             }
             
-            case RenderAPI::OpenGL:
+            case RenderAPI::API::OpenGL:
             {
                 return new OpenGLVertexBuffer(vertices, size);
                 break;
@@ -42,13 +42,13 @@ namespace rz {
     IndexBuffer* rz::IndexBuffer::Create(const unsigned int* indices, unsigned int count)
     {
         switch (Renderer::GetAPI()) {
-            case RenderAPI::None:
+            case RenderAPI::API::None:
             {
                 RZ_CORE_ASSERT(false, "NO Render API selected");
                 break;
             }
 
-            case RenderAPI::OpenGL:
+            case RenderAPI::API::OpenGL:
             {
                 return new OpenGLIndexBuffer(indices, count);
                 break;

@@ -1,13 +1,13 @@
 #include "RZPCH.h"
-#include "Array.h"
+#include "RenderAPI.h"
 
-#include "Razer/Renderer/Renderer.h"
-#include "Platform/OpenGL/OpenGLArray.h"
+#include "Platform/OpenGL/OpenGLRenderAPI.h"
 
 namespace rz {
-	VertexArray* rz::VertexArray::Create()
-	{
-        switch (Renderer::GetAPI()) {
+	RenderAPI::API RenderAPI::s_API = RenderAPI::API::OpenGL;
+
+	RenderAPI* RenderAPI::Get() {
+        switch (RenderAPI::GetAPI()) {
             case RenderAPI::API::None:
             {
                 RZ_CORE_ASSERT(false, "NO Render API selected");
@@ -16,7 +16,7 @@ namespace rz {
 
             case RenderAPI::API::OpenGL:
             {
-                return new OpenGLVertexArray();
+                return new OpenGLRenderAPI();
                 break;
             }
 
@@ -25,7 +25,6 @@ namespace rz {
                 RZ_CORE_ASSERT(false, "Unknown Render API selected");
             }
         }
-		return nullptr;
+        return nullptr;
 	}
 }
-
