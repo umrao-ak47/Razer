@@ -112,7 +112,9 @@ public:
 		m_SquareColor = glm::vec4(0.2f, 0.4f, 0.6f, 1.0f);
 	}
 
-	void OnUpdate() override {
+	void OnUpdate(float delta) override {
+		RZ_TRACE("FPS: {0}", 1.0 / delta);
+
 		RendererCommand::ClearColor(glm::vec4(0.1f, 0.3f, 0.1f, 1.0f));
 		Renderer::BeginScene();
 		m_SquareShader->Bind();

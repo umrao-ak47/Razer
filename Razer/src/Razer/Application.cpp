@@ -22,6 +22,8 @@ namespace rz {
 
 		m_ImguiLayer = std::shared_ptr<ImguiLayer>(new ImguiLayer());
 		PushOverlay(m_ImguiLayer);
+
+		m_Timer = std::unique_ptr<Timer>(Timer::Get());
 	}
 
 	Application::~Application() {
@@ -43,9 +45,13 @@ namespace rz {
 	}
 
 	void Application::Run() {
+		float lastTime = m_Timer->GetTime();
 		while (m_Running) {
+			float time = m_Timer->GetTime();
+			float delta = time - lastTime;
+			lastTime = time;
 			for (const auto& layer : m_LayerStack) {
-				layer->OnUpdate();
+				layer->OnUpdate(delta);
 			}
 			m_ImguiLayer->Begin();
 			for (const auto& layer : m_LayerStack) {

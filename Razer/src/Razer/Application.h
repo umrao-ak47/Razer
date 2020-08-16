@@ -4,6 +4,7 @@
 #include "Razer/Window.h"
 #include "Razer/LayerStack.h"
 #include "Razer/imgui/ImguiLayer.h"
+#include "Razer/Time.h"
 
 namespace rz {
 	class RZAPI Application
@@ -25,6 +26,7 @@ namespace rz {
 		bool OnWindowClose(WindowCloseEvent& e);
 
 	private:
+		std::unique_ptr<Timer> m_Timer;
 		std::shared_ptr<ImguiLayer> m_ImguiLayer;
 		std::unique_ptr<Window> m_Window;
 		bool m_Running;

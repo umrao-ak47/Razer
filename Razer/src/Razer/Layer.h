@@ -11,7 +11,7 @@ namespace rz {
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(float delta) {}
 		virtual void OnImguiRender() {}
 		virtual void OnEvent(Event& event) {}
 
