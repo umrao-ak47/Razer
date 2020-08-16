@@ -20,7 +20,7 @@ namespace rz {
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 
-		m_ImguiLayer = new ImguiLayer();
+		m_ImguiLayer = std::shared_ptr<ImguiLayer>(new ImguiLayer());
 		PushOverlay(m_ImguiLayer);
 	}
 
@@ -44,11 +44,11 @@ namespace rz {
 
 	void Application::Run() {
 		while (m_Running) {
-			for (Layer* layer : m_LayerStack) {
+			for (const auto& layer : m_LayerStack) {
 				layer->OnUpdate();
 			}
 			m_ImguiLayer->Begin();
-			for (Layer* layer : m_LayerStack) {
+			for (const auto& layer : m_LayerStack) {
 				layer->OnImguiRender();
 			}
 			m_ImguiLayer->End();
@@ -58,12 +58,12 @@ namespace rz {
 		}
 	}
 
-	void Application::PushLayer(Layer* layer) {
+	void Application::PushLayer(const std::shared_ptr<Layer>& layer) {
 		m_LayerStack.PushLayer(layer);
 		layer->OnAttach();
 	}
 
-	void Application::PushOverlay(Layer* overlay) {
+	void Application::PushOverlay(const std::shared_ptr<Layer>& overlay) {
 		m_LayerStack.PushOverlay(overlay);
 		overlay->OnAttach();
 	}

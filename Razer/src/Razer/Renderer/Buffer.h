@@ -88,7 +88,12 @@ namespace rz {
 		BufferLayout()
 			: m_Stride(0) {}
 
-		BufferLayout(std::initializer_list<BufferElement> elements)
+		BufferLayout(const std::initializer_list<BufferElement>& elements)
+			: m_Elements(elements) {
+			CalculateOffsetAndStride();
+		}
+
+		BufferLayout(const BufferList& elements)
 			: m_Elements(elements) {
 			CalculateOffsetAndStride();
 		}
@@ -128,8 +133,8 @@ namespace rz {
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
-		virtual void SetLayout(const BufferLayout& layout) = 0;
-		virtual const BufferLayout& GetLayout() const = 0;
+		virtual void SetLayout(const std::shared_ptr<BufferLayout>& layout) = 0;
+		virtual const std::shared_ptr<BufferLayout>& GetLayout() const = 0;
 
 		static VertexBuffer* Create(const float* vertices, unsigned int size);
 	};

@@ -16,8 +16,8 @@ namespace rz {
 
 		void OnEvent(Event& e);
 
-		void PushLayer(Layer* layer);
-		void PushOverlay(Layer* overlay);
+		void PushLayer(const std::shared_ptr<Layer>& layer);
+		void PushOverlay(const std::shared_ptr<Layer>& overlay);
 
 		Window& GetWindow() { return *m_Window; }
 		static Application& Get() { return *s_Instance; }
@@ -25,7 +25,7 @@ namespace rz {
 		bool OnWindowClose(WindowCloseEvent& e);
 
 	private:
-		ImguiLayer* m_ImguiLayer;
+		std::shared_ptr<ImguiLayer> m_ImguiLayer;
 		std::unique_ptr<Window> m_Window;
 		bool m_Running;
 		LayerStack m_LayerStack;

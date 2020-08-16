@@ -24,9 +24,9 @@ public:
 			//{ShaderDataType::FLOAT3, "a_Normal"}
 			};
 
-			vertexBuffer->SetLayout(layout);
+			vertexBuffer->SetLayout(std::make_shared<BufferLayout>(layout));
 		}
-
+		
 		m_VertexArray->AddVertexBuffer(vertexBuffer);
 
 		unsigned int indices[3] = { 0, 1, 2 };
@@ -66,26 +66,11 @@ public:
 
 		m_SquareVA = std::shared_ptr<VertexArray>(VertexArray::Create());
 		float squareVertices[] = {
-			-0.5f, -0.5f, 0.0f,
-			0.5f, -0.5f, 0.0f,
-			0.5f, 0.5f, 0.0f,
-			-0.5f, 0.5f, 0.0f,
+			-0.75f, -0.75f, 0.0f,
+			0.75f, -0.75f, 0.0f,
+			0.75f, 0.75f, 0.0f,
+			-0.75f, 0.75f, 0.0f,
 		};
-
-		std::shared_ptr<VertexBuffer> squareVB = std::shared_ptr<VertexBuffer>(VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
-		{
-			BufferLayout layout = {
-				{ShaderDataType::FLOAT3, "a_Position"}
-			};
-
-			squareVB->SetLayout(layout);
-		}
-
-		m_SquareVA->AddVertexBuffer(squareVB);
-
-		unsigned int squareIndices[] = { 0, 1, 2, 2, 3, 0 };
-		std::shared_ptr<IndexBuffer> squareIB = std::shared_ptr<IndexBuffer>(IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(unsigned int)));
-		m_SquareVA->SetIndexBuffer(squareIB);
 
 		// shader code
 		std::string squareVertSrc = R"(
@@ -108,6 +93,15 @@ public:
 			}
 		)";
 		m_SquareShader = std::shared_ptr<Shader>(Shader::Create(squareVertSrc, squareFragSrc));
+
+		std::shared_ptr<VertexBuffer> squareVB = std::shared_ptr<VertexBuffer>(VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+		squareVB->SetLayout(m_SquareShader->ExtractLayout());
+
+		m_SquareVA->AddVertexBuffer(squareVB);
+
+		unsigned int squareIndices[] = { 0, 1, 2, 2, 3, 0 };
+		std::shared_ptr<IndexBuffer> squareIB = std::shared_ptr<IndexBuffer>(IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(unsigned int)));
+		m_SquareVA->SetIndexBuffer(squareIB);
 	}
 
 	void OnUpdate() override {
@@ -147,7 +141,7 @@ private:
 class App : public Application {
 public:
 	App() {
-		PushLayer(new ExampleLayer());
+		PushLayer(std::shared_ptr<ExampleLayer>(new ExampleLayer()));
 	}
 	~App() {
 

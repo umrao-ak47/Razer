@@ -5,6 +5,31 @@
 #include <glad/glad.h>
 
 namespace rz {
+	static ShaderDataType OpenGLEnumToShaderDataType(GLenum type) {
+		switch(type) {
+			case GL_NONE:                  return ShaderDataType::None;
+			case GL_BOOL:                  return ShaderDataType::BOOL;
+			case GL_UNSIGNED_INT:          return ShaderDataType::UINT;
+			case GL_UNSIGNED_INT_VEC2:     return ShaderDataType::UINT2;
+			case GL_UNSIGNED_INT_VEC3:     return ShaderDataType::UINT3;
+			case GL_UNSIGNED_INT_VEC4:     return ShaderDataType::UINT4;
+			case GL_INT:                   return ShaderDataType::INT;
+			case GL_INT_VEC2:              return ShaderDataType::INT2;
+			case GL_INT_VEC3:              return ShaderDataType::INT3;
+			case GL_INT_VEC4:              return ShaderDataType::INT4;
+			case GL_FLOAT:                 return ShaderDataType::FLOAT;
+			case GL_FLOAT_VEC2:            return ShaderDataType::FLOAT2;
+			case GL_FLOAT_VEC3:            return ShaderDataType::FLOAT3;
+			case GL_FLOAT_VEC4:            return ShaderDataType::FLOAT4;
+			case GL_FLOAT_MAT2:            return ShaderDataType::MAT2;
+			case GL_FLOAT_MAT3:            return ShaderDataType::MAT3;
+			case GL_FLOAT_MAT4:            return ShaderDataType::MAT4;
+		}
+		RZ_CORE_ASSERT(false, "This GLenum Type not supported");
+		return ShaderDataType::None;
+	}
+
+
 	OpenGLShader::OpenGLShader(const std::string& vertSrc, const std::string& fragSrc) {
 		Init(vertSrc, fragSrc);
 	}
@@ -124,6 +149,54 @@ namespace rz {
 		// Always detach shaders after a successful link.
 		glDetachShader(m_RendererID, vertexShader);
 		glDetachShader(m_RendererID, fragmentShader);
+
+		// Compute Layout of Shader
+		ComputeLayout();
+	}
+
+	void OpenGLShader::ComputeLayout() {
+		std::vector<BufferElement> elements;
+
+		GLint count = 0;
+		glGetProgramiv(m_RendererID, GL_ACTIVE_ATTRIBUTES, &count);
+
+		GLint maxSize = 0;
+		glGetProgramiv(m_RendererID, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxSize);
+
+		GLenum type;
+		GLint size;
+		GLsizei length;
+
+		std::vector<GLchar> name(maxSize);
+
+		for (GLint i = 0; i < count; i++) {
+			glGetActiveAttrib(m_RendererID, (GLuint)i, maxSize, &length, &size, &type, &name[0]);
+			
+			BufferElement element(OpenGLEnumToShaderDataType(type), std::string(name.data()));
+			elements.push_back(element);
+		}
+
+		m_Layout = std::shared_ptr<BufferLayout>(new BufferLayout(elements));
+
+		// DEBUG:: Print Info
+		PrintInfo();
+	}
+
+	void OpenGLShader::PrintInfo() {
+		GLint i, count, size;
+		GLenum type;
+		GLint bufSize = 0;
+		glGetProgramiv(m_RendererID, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &bufSize);
+		GLchar* name = new GLchar[bufSize];
+		GLsizei length;
+
+		glGetProgramiv(m_RendererID, GL_ACTIVE_ATTRIBUTES, &count);
+		RZ_CORE_WARN("Active Attribute: {0}", count);
+		for (i = 0; i < count; i++) {
+			glGetActiveAttrib(m_RendererID, (GLuint)i, bufSize, &length, &size, &type, &name[0]);
+			RZ_CORE_WARN("Attrribute: {0} Type: {1} Name: {2} Size: {3} Length: {4} BufSize: {5}", i, type, name, size, length, bufSize);
+		}
+		delete name;
 	}
 }
 

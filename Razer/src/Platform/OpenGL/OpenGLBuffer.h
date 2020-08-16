@@ -16,11 +16,11 @@ namespace rz {
 		void Bind() const override;
 		void Unbind() const override;
 
-		void SetLayout(const BufferLayout& layout) override { m_Layout = layout; }
-		const BufferLayout& GetLayout() const override { return m_Layout; }
+		void SetLayout(const std::shared_ptr<BufferLayout>& layout) override { m_Layout = layout; }
+		const std::shared_ptr<BufferLayout>& GetLayout() const override { return m_Layout; }
 	private:
 		unsigned int m_RendererID;
-		BufferLayout m_Layout;
+		std::shared_ptr<BufferLayout> m_Layout;
 	};
 
 
