@@ -1,7 +1,10 @@
 #include "Razer/RZPCH.h"
 #include "Razer.h"
 
-#include "imgui.h"
+#include <imgui.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 using namespace rz;
 
 class ExampleLayer : public Layer {
@@ -104,13 +107,17 @@ public:
 		unsigned int squareIndices[] = { 0, 1, 2, 2, 3, 0 };
 		std::shared_ptr<IndexBuffer> squareIB = std::shared_ptr<IndexBuffer>(IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(unsigned int)));
 		m_SquareVA->SetIndexBuffer(squareIB);
+		
+		// set color of square
+		m_SquareColor = glm::vec4(0.2f, 0.4f, 0.6f, 1.0f);
 	}
 
 	void OnUpdate() override {
 		RendererCommand::ClearColor(glm::vec4(0.1f, 0.3f, 0.1f, 1.0f));
 		Renderer::BeginScene();
 		m_SquareShader->Bind();
-		m_SquareShader->UploadUniform("u_Color", glm::vec3(0.2f, 0.4f, 0.6f));
+		// Upload Uniform :: Throws an Error on inompatible type
+		m_SquareShader->UploadUniform("u_Color", m_SquareColor);
 		Renderer::Submit(m_SquareVA);
 
 		m_Shader->Bind();
@@ -120,15 +127,18 @@ public:
 	}
 
 	void OnImguiRender() override {
-		// ImGui::Begin("Test");
-		// ImGui::Text("Hello World");
-		// ImGui::End();
+		// Control Color of Saure with ImGui
+		ImGui::Begin("Settings");
+		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
+		ImGui::End();
 	}
 
 	void OnEvent(Event& e) override {
 		//RZ_TRACE("ExampleLayer:: {0}", e.ToString());
 	}
 private:
+	glm::vec4 m_SquareColor;
+
 	std::shared_ptr<VertexArray> m_VertexArray;
 	std::shared_ptr<Shader> m_Shader;
 
