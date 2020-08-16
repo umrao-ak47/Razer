@@ -24,7 +24,7 @@ public:
 			//{ShaderDataType::FLOAT3, "a_Normal"}
 			};
 
-			vertexBuffer->SetLayout(std::make_shared<BufferLayout>(layout));
+			vertexBuffer->SetLayout(layout);
 		}
 		
 		m_VertexArray->AddVertexBuffer(vertexBuffer);

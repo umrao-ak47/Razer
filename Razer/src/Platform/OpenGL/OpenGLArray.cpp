@@ -51,12 +51,12 @@ namespace rz {
 
 		vertexBuffer->Bind();
 		const auto& layout = vertexBuffer->GetLayout();
-		RZ_CORE_ASSERT(layout->GetElements().size(), "Vertex Buffer has no layout")
+		RZ_CORE_ASSERT(layout.GetElements().size(), "Vertex Buffer has no layout")
 		unsigned int index = 0;
-		for (const auto& element : layout->GetElements()) {
+		for (const auto& element : layout) {
 			glEnableVertexAttribArray(index);
 			glVertexAttribPointer(index, element.Count, ShaderDataTypeToOpenGLBaseType(element.Type),
-				(element.Normalized ? GL_TRUE : GL_FALSE), layout->GetStride(), (const void*)element.Offset);
+				(element.Normalized ? GL_TRUE : GL_FALSE), layout.GetStride(), (const void*)element.Offset);
 			index++;
 		}
 		m_VertexBuffers.push_back(vertexBuffer);
