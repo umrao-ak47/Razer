@@ -87,9 +87,11 @@ public:
 			#version 410 core
 			
 			layout(location=0) out vec4 o_Color;
+			uniform vec4 u_Color;
 			
 			void main(){
-				o_Color = vec4(0.3f, 0.3f, 0.8f, 1.0f);
+				o_Color = vec4(0.7f, 0.1f, 0.3f, 1.0f);
+				o_Color = u_Color;
 			}
 		)";
 		m_SquareShader = std::shared_ptr<Shader>(Shader::Create(squareVertSrc, squareFragSrc));
@@ -105,9 +107,10 @@ public:
 	}
 
 	void OnUpdate() override {
-		RendererCommand::ClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
+		RendererCommand::ClearColor(glm::vec4(0.1f, 0.3f, 0.1f, 1.0f));
 		Renderer::BeginScene();
 		m_SquareShader->Bind();
+		m_SquareShader->UploadUniform("u_Color", glm::vec3(0.2f, 0.4f, 0.6f));
 		Renderer::Submit(m_SquareVA);
 
 		m_Shader->Bind();
@@ -117,9 +120,9 @@ public:
 	}
 
 	void OnImguiRender() override {
-		ImGui::Begin("Test");
-		ImGui::Text("Hello World");
-		ImGui::End();
+		// ImGui::Begin("Test");
+		// ImGui::Text("Hello World");
+		// ImGui::End();
 	}
 
 	void OnEvent(Event& e) override {
