@@ -14,7 +14,7 @@ namespace rz {
 
 	Application::Application()
 	: m_Running(true) {
-		RZ_CORE_ASSERT(s_Instance, "Application Already exists");
+		RZ_CORE_ASSERT(!s_Instance, "Application Already exists");
 		s_Instance = this;
 
 		m_Window = std::unique_ptr<Window>(Window::Create());

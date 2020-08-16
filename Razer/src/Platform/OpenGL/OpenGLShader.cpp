@@ -6,6 +6,7 @@
 
 namespace rz {
 	static ShaderDataType OpenGLEnumToShaderDataType(GLenum type) {
+		RZ_CORE_TRACE("INSIDE CONVERTER");
 		switch(type) {
 			case GL_NONE:                  return ShaderDataType::None;
 			case GL_BOOL:                  return ShaderDataType::BOOL;
@@ -24,6 +25,7 @@ namespace rz {
 			case GL_FLOAT_MAT2:            return ShaderDataType::MAT2;
 			case GL_FLOAT_MAT3:            return ShaderDataType::MAT3;
 			case GL_FLOAT_MAT4:            return ShaderDataType::MAT4;
+			case GL_SAMPLER_2D:            return ShaderDataType::SAMPLER2D;
 		}
 		RZ_CORE_ASSERT(false, "This GLenum Type not supported");
 		return ShaderDataType::None;
@@ -250,6 +252,7 @@ namespace rz {
 
 			UniformElement element(OpenGLEnumToShaderDataType(type), std::string(name.data()));
 			elements.push_back(element);
+			RZ_CORE_TRACE("Shader Type: {0}", element.Type);
 		}
 
 		m_UniformLayout = std::shared_ptr<UniformLayout>(new UniformLayout(elements));

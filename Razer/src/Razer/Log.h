@@ -39,5 +39,3 @@ namespace rz {
 #define RZ_WARN(...)          ::rz::Log::GetClientLogger()->warn(__VA_ARGS__)
 #define RZ_ERROR(...)         ::rz::Log::GetClientLogger()->error(__VA_ARGS__)
 #define RZ_FATAL(...)         ::rz::Log::GetClientLogger()->critical(__VA_ARGS__)
-
-

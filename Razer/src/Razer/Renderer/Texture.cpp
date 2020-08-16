@@ -1,13 +1,13 @@
 #include "RZPCH.h"
-#include "Shader.h"
+#include "Texture.h"
 
-#include "Razer/Renderer/Renderer.h"
-#include "Platform/OpenGL/OpenGLShader.h"
-#include "Razer/Log.h"
+#include "Razer/Renderer/RenderAPI.h"
+#include "Platform/OpenGL/OpenGLTexture.h"
 
 namespace rz {
-	Shader* Shader::Create(const std::string& vertSrc, const std::string& fragSrc) {
-        switch (Renderer::GetAPI()) {
+	Texture* Texture::Create(const std::string& file, bool transparent)
+	{
+        switch (RenderAPI::GetAPI()) {
             case RenderAPI::API::None:
             {
                 RZ_CORE_ASSERT(false, "NO Render API selected");
@@ -16,7 +16,7 @@ namespace rz {
 
             case RenderAPI::API::OpenGL:
             {
-                return new OpenGLShader(vertSrc, fragSrc);
+                return new OpenGLTexture(file, transparent);
                 break;
             }
 
@@ -25,6 +25,7 @@ namespace rz {
                 RZ_CORE_ASSERT(false, "Unknown Render API selected");
             }
         }
-        return nullptr;
+		return nullptr;
 	}
 }
+

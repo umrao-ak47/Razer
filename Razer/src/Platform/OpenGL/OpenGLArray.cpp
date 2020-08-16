@@ -1,7 +1,9 @@
 #include "RZPCH.h"
 #include "OpenGLArray.h"
 
+#include "Razer/Log.h"
 #include <glad/glad.h>
+
 
 namespace rz {
 	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type) {

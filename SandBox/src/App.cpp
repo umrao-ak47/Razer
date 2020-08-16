@@ -70,10 +70,10 @@ public:
 
 		m_SquareVA = std::shared_ptr<VertexArray>(VertexArray::Create());
 		float squareVertices[] = {
-			-0.75f, -0.75f, 0.0f,
-			0.75f, -0.75f, 0.0f,
-			0.75f, 0.75f, 0.0f,
-			-0.75f, 0.75f, 0.0f,
+			-0.75f, -0.75f, 0.0f, 0.0f, 0.0f,
+			0.75f, -0.75f, 0.0f, 1.0f, 0.0f,
+			0.75f, 0.75f, 0.0f, 1.0f, 1.0f,
+			-0.75f, 0.75f, 0.0f, 0.0f, 1.0f
 		};
 
 		// shader code
@@ -81,9 +81,12 @@ public:
 			#version 410 core
 			
 			layout(location=0) in vec3 a_Position;
+			layout(location=1) in vec2 a_TexCords;
+			out vec2 v_TexCords;
 			
 			void main(){
 				gl_Position = vec4(a_Position, 1.0);
+				v_TexCords = a_TexCords;
 			}
 		)";
 
@@ -91,11 +94,12 @@ public:
 			#version 410 core
 			
 			layout(location=0) out vec4 o_Color;
-			uniform vec4 u_Color;
+			in vec2 v_TexCords;
+			
+			uniform sampler2D u_Texture;
 			
 			void main(){
-				o_Color = vec4(0.7f, 0.1f, 0.3f, 1.0f);
-				o_Color = u_Color;
+				o_Color = texture(u_Texture, v_TexCords);
 			}
 		)";
 		m_SquareShader = std::shared_ptr<Shader>(Shader::Create(squareVertSrc, squareFragSrc));
@@ -111,6 +115,7 @@ public:
 		
 		// set color of square
 		m_SquareColor = glm::vec4(0.2f, 0.4f, 0.6f, 1.0f);
+		m_Texture = std::shared_ptr<Texture>(Texture::Create("D://imgs//deadpool_refrence.png", true));
 	}
 
 	void OnUpdate(float delta) override {
@@ -120,7 +125,8 @@ public:
 		Renderer::BeginScene();
 		m_SquareShader->Bind();
 		// Upload Uniform :: Throws an Error on inompatible type
-		m_SquareShader->UploadUniform("u_Color", m_SquareColor);
+		// m_SquareShader->UploadUniform("u_Color", m_SquareColor);
+		m_Texture->Bind();
 		Renderer::Submit(m_SquareVA);
 
 		m_Shader->Bind();
@@ -142,6 +148,7 @@ public:
 private:
 	glm::vec4 m_SquareColor;
 
+	std::shared_ptr<Texture> m_Texture;
 	std::shared_ptr<VertexArray> m_VertexArray;
 	std::shared_ptr<Shader> m_Shader;
 

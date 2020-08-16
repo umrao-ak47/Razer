@@ -11,14 +11,14 @@ namespace rz{
 	struct RZAPI UniformElement {
 		std::string Name;
 		ShaderDataType Type;
-		unsigned int Size;
-		//unsigned int Count;
+		// unsigned int Size;
+		// unsigned int Count;
 
 		UniformElement()
-			: Name("None"), Type(ShaderDataType::None), Size(0) {}
+			: Name("None"), Type(ShaderDataType::None) {}
 
 		UniformElement(ShaderDataType type, const std::string& name)
-			: Name(name), Type(type), Size(ShaderDataTypeSize(type)) {}
+			: Name(name), Type(type) {}
 	};
 
 	class RZAPI UniformLayout {
