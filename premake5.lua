@@ -14,8 +14,10 @@ IncludeDir["GLFW"] = "Razer/external/GLFW/include"
 IncludeDir["Glad"] = "Razer/external/Glad/include"
 IncludeDir["imgui"] = "Razer/external/imgui"
 IncludeDir["glm"] = "Razer/external/glm"
+IncludeDir["stb_img"] = "Razer/external/stb_image"
 
 include "Razer/external/Glad"
+include "Razer/external/stb_image"
 
 project "GLFW"
 	location "Razer/external/GLFW"
@@ -134,7 +136,8 @@ project "Razer"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.imgui}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb_img}"
 	}
 
 	links
@@ -142,7 +145,8 @@ project "Razer"
 		"GLFW",
 		"Glad",
 		"Imgui",
-		"opengl32.lib"
+		"opengl32.lib",
+		"stb_image"
 	}
 
 	filter "system:windows"
@@ -190,7 +194,8 @@ project "Sandbox"
 		"Razer/external/spdlog/include",
 		"Razer/src",
 		"%{IncludeDir.imgui}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb_img}"
 	}
 
 	links

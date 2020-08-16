@@ -4,6 +4,7 @@
 #include <imgui.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <stb_image.h>
 
 using namespace rz;
 
@@ -113,7 +114,7 @@ public:
 	}
 
 	void OnUpdate(float delta) override {
-		RZ_TRACE("FPS: {0}", 1.0 / delta);
+		//RZ_TRACE("FPS: {0}", 1.0 / delta);
 
 		RendererCommand::ClearColor(glm::vec4(0.1f, 0.3f, 0.1f, 1.0f));
 		Renderer::BeginScene();
