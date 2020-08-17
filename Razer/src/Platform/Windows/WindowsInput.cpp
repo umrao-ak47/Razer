@@ -1,7 +1,7 @@
 #include "RZPCH.h"
 #include "WindowsInput.h"
 
-#include "Razer/Application.h"
+#include "Razer/Core/Application.h"
 #include <GLFW/glfw3.h>
 
 namespace rz {

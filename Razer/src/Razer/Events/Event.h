@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core.h"
+#include "Razer/Core.h"
 
 namespace rz {
 	// TODO: Make events unblokcing

@@ -1,7 +1,7 @@
 #include "RZPCH.h"
 #include "OpenGLContext.h"
 
-#include "Razer/Log.h"
+#include "Razer/Core/Log.h"
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Razer/Core.h"
-#include "Razer/Input.h"
+#include "Razer/Core/Input.h"
 
 namespace rz {
 	class WindowsInput : public Input {

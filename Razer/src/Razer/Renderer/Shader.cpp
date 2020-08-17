@@ -3,7 +3,7 @@
 
 #include "Razer/Renderer/Renderer.h"
 #include "Platform/OpenGL/OpenGLShader.h"
-#include "Razer/Log.h"
+#include "Razer/Core/Log.h"
 
 namespace rz {
 	Shader* Shader::Create(const std::string& vertSrc, const std::string& fragSrc) {

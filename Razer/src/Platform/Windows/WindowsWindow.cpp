@@ -1,7 +1,7 @@
 #include "RZPCH.h"
 #include "WindowsWindow.h"
 
-#include "Razer/Log.h"
+#include "Razer/Core/Log.h"
 #include "Platform/OpenGL/OpenGLContext.h"
 
 namespace rz {

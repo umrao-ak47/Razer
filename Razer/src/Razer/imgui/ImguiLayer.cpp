@@ -1,8 +1,8 @@
 #include "RZPCH.h"
 #include "ImguiLayer.h"
 
-#include "Razer/Application.h"
-#include "Razer/Log.h"
+#include "Razer/Core/Application.h"
+#include "Razer/Core/Log.h"
 
 #include <imgui.h>
 #include <examples/imgui_impl_opengl3.h>

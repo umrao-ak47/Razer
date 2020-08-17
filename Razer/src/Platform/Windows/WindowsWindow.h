@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Razer/Window.h"
+#include "Razer/Core/Window.h"
 #include "Razer/Renderer/RenderContext.h"
 #include <GLFW/glfw3.h>
 

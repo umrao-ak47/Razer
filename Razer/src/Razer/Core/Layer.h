@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core.h"
-#include "Events/Event.h"
+#include "Razer/Core.h"
+#include "Razer/Events/Event.h"
 
 namespace rz {
 	class RZAPI Layer {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Razer/Time.h"
+#include "Razer/Core/Time.h"
 
 namespace rz {
 	class WindowsTimer : public Timer {

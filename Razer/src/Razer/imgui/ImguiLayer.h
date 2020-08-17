@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Razer/Core.h"
-#include "Razer/Layer.h"
+#include "Razer/Core/Layer.h"
 #include "Razer/Events/Event.h"
 #include "Razer/Events/ApplicationEvent.h"
 #include "Razer/Events/KeyEvent.h"

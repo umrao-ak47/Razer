@@ -4,8 +4,8 @@
 #include "Razer/Events/ApplicationEvent.h"
 #include "Razer/Events/KeyEvent.h"
 #include "Razer/Events/MouseEvent.h"
-#include "Razer/Log.h"
-#include "Razer/Input.h"
+#include "Razer/Core/Log.h"
+#include "Razer/Core/Input.h"
 #include "Razer/Renderer/Renderer.h"
 
 

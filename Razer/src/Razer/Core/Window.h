@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Core.h"
-#include "Events/Event.h"
-#include "Events/ApplicationEvent.h"
-#include "Events/KeyEvent.h"
-#include "Events/MouseEvent.h"
+#include "Razer/Core.h"
+#include "Razer/Events/Event.h"
+#include "Razer/Events/ApplicationEvent.h"
+#include "Razer/Events/KeyEvent.h"
+#include "Razer/Events/MouseEvent.h"
 
 
 namespace rz {

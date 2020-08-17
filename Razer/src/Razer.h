@@ -2,12 +2,12 @@
 
 // include required
 
-#include "Razer/Application.h"
-#include "Razer/Input.h"
-#include "Razer/KeyCodes.h"
-#include "Razer/MouseButtonCodes.h"
-#include "Razer/Layer.h"
-#include "Razer/Log.h"
+#include "Razer/Core/Application.h"
+#include "Razer/Core/Input.h"
+#include "Razer/Core/KeyCodes.h"
+#include "Razer/Core/MouseButtonCodes.h"
+#include "Razer/Core/Layer.h"
+#include "Razer/Core/Log.h"
 
 // Renderer
 #include "Razer/Renderer/Renderer.h"
@@ -21,5 +21,5 @@
 
 
 // --------Entry Point----------
-#include "Razer/EntryPoint.h"
+#include "Razer/Core/EntryPoint.h"
 // -----------------------------

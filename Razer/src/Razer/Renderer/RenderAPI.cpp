@@ -2,7 +2,7 @@
 #include "RenderAPI.h"
 
 #include "Platform/OpenGL/OpenGLRenderAPI.h"
-#include "Razer/Log.h"
+#include "Razer/Core/Log.h"
 
 namespace rz {
 	RenderAPI::API RenderAPI::s_API = RenderAPI::API::OpenGL;

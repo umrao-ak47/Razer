@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core.h"
+#include "Razer/Core.h"
 #include <spdlog/spdlog.h>
 
 

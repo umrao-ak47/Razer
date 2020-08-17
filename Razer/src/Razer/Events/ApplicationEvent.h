@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Razer/Core.h"
-#include "Event.h"
+#include "Razer/Events/Event.h"
 
 
 namespace rz {

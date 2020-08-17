@@ -1,10 +1,10 @@
 #pragma once
 
 #include "Razer/Core.h"
-#include "Razer/Window.h"
-#include "Razer/LayerStack.h"
+#include "Razer/Core/Window.h"
+#include "Razer/Core/LayerStack.h"
 #include "Razer/imgui/ImguiLayer.h"
-#include "Razer/Time.h"
+#include "Razer/Core/Time.h"
 
 namespace rz {
 	class RZAPI Application

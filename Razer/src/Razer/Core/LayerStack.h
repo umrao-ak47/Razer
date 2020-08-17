@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Razer/Core.h"
-#include "Layer.h"
+#include "Razer/Core/Layer.h"
 #include <memory>
 
 namespace rz {

@@ -1,7 +1,7 @@
 #include "RZPCH.h"
 #include "OpenGLShader.h"
 
-#include "Razer/Log.h"
+#include "Razer/Core/Log.h"
 #include <glad/glad.h>
 
 namespace rz {

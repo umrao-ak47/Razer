@@ -1,7 +1,7 @@
 #include "RZPCH.h"
 #include "OpenGLTexture.h"
 
-#include "Razer/Log.h"
+#include "Razer/Core/Log.h"
 #include <glad/glad.h>
 #include <stb_image.h>
 
