@@ -5,6 +5,7 @@
 
 #include <string>
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 
 namespace rz{
@@ -54,6 +55,7 @@ namespace rz{
 		virtual void UploadUniform(const std::string& name, float value) = 0;
 		virtual void UploadUniform(const std::string& name, const glm::vec3& value) = 0;
 		virtual void UploadUniform(const std::string& name,const glm::vec4& value) = 0;
+		virtual void UploadUniform(const std::string& name, const glm::mat4& value) = 0;
 
 		virtual const std::shared_ptr<BufferLayout>& ExtractLayout() const = 0;
 		virtual const std::shared_ptr<UniformLayout>& ExtractUniformLayout() const = 0;

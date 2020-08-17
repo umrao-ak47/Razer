@@ -6,7 +6,6 @@
 
 namespace rz {
 	static ShaderDataType OpenGLEnumToShaderDataType(GLenum type) {
-		RZ_CORE_TRACE("INSIDE CONVERTER");
 		switch(type) {
 			case GL_NONE:                  return ShaderDataType::None;
 			case GL_BOOL:                  return ShaderDataType::BOOL;
@@ -203,6 +202,12 @@ namespace rz {
 		glUniform4f(index, value.x, value.y, value.z, value.w);
 	}
 
+	void OpenGLShader::UploadUniform(const std::string& name, const glm::mat4& value) {
+		int index = ValidateUnform(name, ShaderDataType::MAT4);
+		if (index == -1) return;
+		glUniformMatrix4fv(index, 1, GL_FALSE, glm::value_ptr(value));
+	}
+
 	void OpenGLShader::ComputeLayout() {
 		std::vector<BufferElement> elements;
 
@@ -252,7 +257,6 @@ namespace rz {
 
 			UniformElement element(OpenGLEnumToShaderDataType(type), std::string(name.data()));
 			elements.push_back(element);
-			RZ_CORE_TRACE("Shader Type: {0}", element.Type);
 		}
 
 		m_UniformLayout = std::shared_ptr<UniformLayout>(new UniformLayout(elements));

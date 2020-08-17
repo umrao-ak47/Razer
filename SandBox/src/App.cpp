@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <stb_image.h>
+#include <iostream>
 
 using namespace rz;
 
@@ -43,11 +44,14 @@ public:
 			
 			layout(location=0) in vec3 a_Position;
 			layout(location=1) in vec4 a_Color;
+			uniform mat4 u_ProjectionViewMatrix;
+			uniform mat4 u_Trans;
+			
 			out vec3 v_Position;
 			out vec4 v_Color;
 			
 			void main(){
-				gl_Position = vec4(a_Position, 1.0);
+				gl_Position = u_ProjectionViewMatrix * ( u_Trans * vec4(a_Position, 1.0));
 				v_Position = a_Position;
 				v_Color = a_Color;
 			}
@@ -82,10 +86,12 @@ public:
 			
 			layout(location=0) in vec3 a_Position;
 			layout(location=1) in vec2 a_TexCords;
+			uniform mat4 u_ProjectionViewMatrix;
+			
 			out vec2 v_TexCords;
 			
 			void main(){
-				gl_Position = vec4(a_Position, 1.0);
+				gl_Position =  u_ProjectionViewMatrix * vec4(a_Position, 1.0);
 				v_TexCords = a_TexCords;
 			}
 		)";
@@ -116,22 +122,39 @@ public:
 		// set color of square
 		m_SquareColor = glm::vec4(0.2f, 0.4f, 0.6f, 1.0f);
 		m_Texture = std::shared_ptr<Texture>(Texture::Create("D://imgs//deadpool_refrence.png", true));
+
+		m_Camera = Camera();
+		m_Camera.SetPosition(glm::vec3(0.0f, 0.0f, 2.0f));
+		//m_Camera.SetRotation(90.0f);
+
+		m_Time = 0.0f;
+	}
+
+	// DEBUG MAT4
+	static void Print(const glm::mat4& m) {
+		for (int i = 0;i < 4; i++){
+			for (int j = 0; j < 4; j++) {
+				std::cout << m[i][j] << ' ';
+			}
+			std::cout << std::endl;
+		}
+		std::cout << std::endl;
 	}
 
 	void OnUpdate(float delta) override {
 		//RZ_TRACE("FPS: {0}", 1.0 / delta);
+		m_Time += delta;
 
-		RendererCommand::ClearColor(glm::vec4(0.1f, 0.3f, 0.1f, 1.0f));
-		Renderer::BeginScene();
-		m_SquareShader->Bind();
-		// Upload Uniform :: Throws an Error on inompatible type
-		// m_SquareShader->UploadUniform("u_Color", m_SquareColor);
-		m_Texture->Bind();
-		Renderer::Submit(m_SquareVA);
-
+		m_Trans = glm::mat4(1.0f);
+		m_Trans = glm::translate(m_Trans, glm::vec3(0.5f * glm::cos(glm::radians(m_Time * 50.0f)), 0.5f * glm::sin(glm::radians(m_Time * 50.0f)), 0.0f));
+		m_Trans = glm::rotate(m_Trans, glm::radians(m_Time * 50.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 		m_Shader->Bind();
-		Renderer::Submit(m_VertexArray);
+		m_Shader->UploadUniform("u_Trans", m_Trans);
 
+		RendererCommand::ClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
+		Renderer::BeginScene(m_Camera);
+		Renderer::Submit(m_SquareShader, m_SquareVA, m_Texture);
+		Renderer::Submit(m_Shader, m_VertexArray);
 		Renderer::EndScene();
 	}
 
@@ -143,10 +166,41 @@ public:
 	}
 
 	void OnEvent(Event& e) override {
-		//RZ_TRACE("ExampleLayer:: {0}", e.ToString());
+		//RZ_TRACE("ExampleLayer:: {0}", e);
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<KeyPressEvent>(std::bind(&ExampleLayer::OnKeyPressEvent, this, std::placeholders::_1));
+		dispatcher.Dispatch<MouseScrollEvent>(std::bind(&ExampleLayer::OnMouseScrollEvent, this, std::placeholders::_1));
+	}
+
+	bool OnKeyPressEvent(KeyPressEvent& e) {
+		int keyCode = e.GetKeyCode();
+		if (keyCode == RZ_KEY_UP) {
+			m_Camera.SetPosition(m_Camera.GetPosition() + glm::vec3(0.0f, -1.0f, 0.0f));
+		}
+		else if (keyCode == RZ_KEY_DOWN) {
+			m_Camera.SetPosition(m_Camera.GetPosition() + glm::vec3(0.0f, 1.0f, 0.0f));
+		}
+		if (keyCode == RZ_KEY_LEFT) {
+			m_Camera.SetPosition(m_Camera.GetPosition() + glm::vec3(1.0f, 0.0f, 0.0f));
+		}
+		else if (keyCode == RZ_KEY_RIGHT) {
+			m_Camera.SetPosition(m_Camera.GetPosition() + glm::vec3(-1.0f, 0.0f, 0.0f));
+		}
+		
+		return true;
+	}
+
+	bool OnMouseScrollEvent(MouseScrollEvent& e) {
+		int z = e.GetYOffset();
+		m_Camera.SetPosition(m_Camera.GetPosition() + glm::vec3(0.0f, 0.0f, -z));
+
+		return true;
 	}
 private:
+	Camera m_Camera;
 	glm::vec4 m_SquareColor;
+	glm::mat4 m_Trans;
+	float m_Time;
 
 	std::shared_ptr<Texture> m_Texture;
 	std::shared_ptr<VertexArray> m_VertexArray;

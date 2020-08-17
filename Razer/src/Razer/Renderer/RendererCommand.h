@@ -14,6 +14,10 @@ namespace rz {
 			s_RenderAPI->Clear();
 		}
 
+		static void SetViewPort(int width, int height) {
+			s_RenderAPI->SetViewPort(width, height);
+		}
+
 		static void DrawElements(std::shared_ptr<VertexArray>& vertexArray) {
 			s_RenderAPI->DrawElements(vertexArray);
 		}

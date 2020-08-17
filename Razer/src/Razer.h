@@ -17,6 +17,7 @@
 #include "Razer/Renderer/Buffer.h"
 #include "Razer/Renderer/Shader.h"
 #include "Razer/Renderer/Texture.h"
+#include "Razer/Renderer/Camera.h"
 
 
 // --------Entry Point----------

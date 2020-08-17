@@ -15,6 +15,7 @@ namespace rz {
 		void UploadUniform(const std::string& name, float value) override;
 		void UploadUniform(const std::string& name, const glm::vec3& value) override;
 		void UploadUniform(const std::string& name, const glm::vec4& value) override;
+		void UploadUniform(const std::string& name, const glm::mat4& value) override;
 		
 		const std::shared_ptr<BufferLayout>& ExtractLayout() const override { return m_Layout; }
 		const std::shared_ptr<UniformLayout>& ExtractUniformLayout() const override { return m_UniformLayout; }

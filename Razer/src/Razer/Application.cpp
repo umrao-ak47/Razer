@@ -31,10 +31,12 @@ namespace rz {
 	}
 
 	void Application::OnEvent(Event& e) {
-		// RZ_CORE_TRACE("Application:: {0}", e.ToString());
+		//RZ_CORE_TRACE("Application:: {0}", e);
 
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(std::bind(&Application::OnWindowClose, this, std::placeholders::_1));
+		dispatcher.Dispatch<WindowResizeEvent>(std::bind(&Application::OnWindowResize, this, std::placeholders::_1));
+		if (e.Handled()) return;
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); ) {
 			(*(--it))->OnEvent(e);
@@ -76,6 +78,11 @@ namespace rz {
 
 	bool Application::OnWindowClose(WindowCloseEvent& e) {
 		m_Running = false;
+		return true;
+	}
+
+	bool Application::OnWindowResize(WindowResizeEvent& e) {
+		RendererCommand::SetViewPort(e.GetWidth(), e.GetHeight());
 		return true;
 	}
 }
