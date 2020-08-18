@@ -19,6 +19,9 @@
 #include "Razer/Renderer/Texture.h"
 #include "Razer/Renderer/Camera.h"
 
+// Objects
+#include "Razer/Objects/Mesh.h"
+
 
 // --------Entry Point----------
 #include "Razer/Core/EntryPoint.h"
