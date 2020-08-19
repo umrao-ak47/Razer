@@ -9,6 +9,6 @@ namespace rz {
 		void Clear() override;
 
 		void SetViewPort(int width, int height) override;
-		void DrawElements(std::shared_ptr<VertexArray>& vertexArray) override;
+		void DrawElements(const Ref<VertexArray>& vertexArray) override;
 	};
 }

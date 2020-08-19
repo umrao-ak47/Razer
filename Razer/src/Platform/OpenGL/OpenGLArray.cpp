@@ -48,7 +48,7 @@ namespace rz {
 		glBindVertexArray(0);
 	}
 
-	void OpenGLVertexArray::AddVertexBuffer(VertexBufferPtr& vertexBuffer) {
+	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) {
 		glBindVertexArray(m_RendererID);
 
 		vertexBuffer->Bind();
@@ -65,7 +65,7 @@ namespace rz {
 		glBindVertexArray(0);
 	}
 
-	void OpenGLVertexArray::SetIndexBuffer(IndexBufferPtr& indexBuffer) {
+	void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer) {
 		glBindVertexArray(m_RendererID);
 
 		indexBuffer->Bind();

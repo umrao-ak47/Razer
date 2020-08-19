@@ -25,7 +25,7 @@ namespace rz {
 		//glLoadIdentity();
 	}
 
-	void OpenGLRenderAPI::DrawElements(std::shared_ptr<VertexArray>& vertexArray) {
+	void OpenGLRenderAPI::DrawElements(const Ref<VertexArray>& vertexArray) {
 		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 	}
 

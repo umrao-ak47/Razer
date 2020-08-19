@@ -25,9 +25,9 @@ public:
 		m_Mesh.SetVertexData(vertices);
 		m_Mesh.SetIndexData(indices);
 
-		m_VertexArray = std::shared_ptr<VertexArray>(VertexArray::Create());
+		m_VertexArray = Ref<VertexArray>(VertexArray::Create());
 
-		std::shared_ptr<VertexBuffer> vertexBuffer = std::shared_ptr<VertexBuffer>(VertexBuffer::Create(&m_Mesh.GetVertexData()[0], m_Mesh.GetVetexDataSize()));
+		Ref<VertexBuffer> vertexBuffer = Ref<VertexBuffer>(VertexBuffer::Create(&m_Mesh.GetVertexData()[0], m_Mesh.GetVetexDataSize()));
 		{
 			BufferLayout layout = {
 			{ShaderDataType::FLOAT3, "a_Position"},
@@ -39,7 +39,7 @@ public:
 		}
 		
 		m_VertexArray->AddVertexBuffer(vertexBuffer);
-		std::shared_ptr<IndexBuffer> indexBuffer = std::shared_ptr<IndexBuffer>(IndexBuffer::Create(&m_Mesh.GetIndexData()[0], m_Mesh.GetIndexCount()));
+		Ref<IndexBuffer> indexBuffer = Ref<IndexBuffer>(IndexBuffer::Create(&m_Mesh.GetIndexData()[0], m_Mesh.GetIndexCount()));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 		
 
@@ -71,24 +71,42 @@ public:
 			}
 		)";
 
-		m_Shader = std::shared_ptr<Shader>(Shader::Create(vertSrc, fragSrc));
+		m_Shader = Ref<Shader>(Shader::Create(vertSrc, fragSrc));
 
 
 		std::vector<float> squareVertices = {
-			-0.75f, -0.75f, 0.0f, 0.0f, 0.0f,
-			0.75f, -0.75f, 0.0f, 1.0f, 0.0f,
-			0.75f, 0.75f, 0.0f, 1.0f, 1.0f,
-			-0.75f, 0.75f, 0.0f, 0.0f, 1.0f
+			// front
+			-0.75f, -0.75f, 0.75f, 0.0f, 0.0f, // 1
+			0.75f, -0.75f, 0.75f, 1.0f, 0.0f, // 2
+			0.75f, 0.75f, 0.75f, 1.0f, 1.0f,   // 3
+			-0.75f, 0.75f, 0.75f, 0.0f, 1.0f,  // 4
+			// back
+			- 0.75f, -0.75f, -0.75f, 0.0f, 0.0f, // 5
+			0.75f, -0.75f, -0.75f, 1.0f, 0.0f,  // 6
+			0.75f, 0.75f, -0.75f, 1.0f, 1.0f,  // 7
+			-0.75f, 0.75f, -0.75f, 0.0f, 1.0f  // 8
 		};
 
-		std::vector<unsigned int> squareIndices = { 0, 1, 2, 2, 3, 0 };
+		std::vector<unsigned int> squareIndices = {
+			// front
+			0, 1, 2, 2, 3, 0,
+			// right
+			1, 5, 6, 6, 2, 1,
+			// back
+			7, 6, 5, 5, 4, 7,
+			// left
+			4, 0, 3, 3, 7, 4,
+			// bottom
+			4, 5, 1, 1, 0, 4,
+			// top
+			3, 2, 6, 6, 7, 3
+		};
 
 		m_Square = Mesh();
 		m_Square.SetVertexData(squareVertices);
 		m_Square.SetIndexData(squareIndices);
-
 		
-		m_SquareVA = std::shared_ptr<VertexArray>(VertexArray::Create());
+		m_SquareVA = Ref<VertexArray>(VertexArray::Create());
 		
 		// shader code
 		std::string squareVertSrc = R"(
@@ -111,24 +129,25 @@ public:
 			
 			layout(location=0) out vec4 o_Color;
 			in vec2 v_TexCords;
+			uniform vec3 u_LightColor;
 			
 			uniform sampler2D u_Texture;
 			
 			void main(){
-				o_Color = texture(u_Texture, v_TexCords);
+				o_Color = vec4(u_LightColor, 1.0f) * texture(u_Texture, v_TexCords);
 			}
 		)";
 
-		m_SquareShader = std::shared_ptr<Shader>(Shader::Create(squareVertSrc, squareFragSrc));
+		m_SquareShader = Ref<Shader>(Shader::Create(squareVertSrc, squareFragSrc));
 
-		std::shared_ptr<VertexBuffer> squareVB = std::shared_ptr<VertexBuffer>(VertexBuffer::Create(&m_Square.GetVertexData()[0], m_Square.GetVetexDataSize()));
+		Ref<VertexBuffer> squareVB = Ref<VertexBuffer>(VertexBuffer::Create(&m_Square.GetVertexData()[0], m_Square.GetVetexDataSize()));
 		squareVB->SetLayout(m_SquareShader->ExtractLayout());
 		m_SquareVA->AddVertexBuffer(squareVB);
 
-		std::shared_ptr<IndexBuffer> squareIB = std::shared_ptr<IndexBuffer>(IndexBuffer::Create(&m_Square.GetIndexData()[0], m_Square.GetIndexCount()));
+		Ref<IndexBuffer> squareIB = Ref<IndexBuffer>(IndexBuffer::Create(&m_Square.GetIndexData()[0], m_Square.GetIndexCount()));
 		m_SquareVA->SetIndexBuffer(squareIB);
 
-		m_Texture = std::shared_ptr<Texture>(Texture::Create("D://imgs//deadpool_refrence.png", true));
+		m_Texture = Ref<Texture>(Texture::Create("D://imgs//deadpool_refrence.png", true));
 
 		m_Camera = Camera();
 		m_Camera.SetPosition(glm::vec3(0.0f, 0.0f, 2.0f));
@@ -136,6 +155,67 @@ public:
 
 		m_Time = 0.0f;
 		m_Mesh.SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
+
+		// Light Calculations
+		std::vector<float> lightVertices = {
+			// front
+			-0.75f, -0.75f, 0.75f, // 1
+			0.75f, -0.75f, 0.75f, // 2
+			0.75f, 0.75f, 0.75f,  // 3
+			-0.75f, 0.75f, 0.75f,  // 4
+			// back
+			-0.75f, -0.75f, -0.75f, // 5
+			0.75f, -0.75f, -0.75f,   // 6
+			0.75f, 0.75f, -0.75f,   // 7
+			-0.75f, 0.75f, -0.75f,  // 8
+		};
+
+		m_LightSource = Mesh();
+		m_LightSource.SetVertexData(lightVertices);
+		m_LightSource.SetIndexData(squareIndices);
+		m_LightSource.SetPoistion(glm::vec3(2.0f, 0.0f, 0.0f));
+		m_LightSource.SetScale(glm::vec3(0.1f, 0.1f, 0.1f));
+
+		m_LightVA = Ref<VertexArray>(VertexArray::Create());
+
+		// shader code
+		std::string lightVertSrc = R"(
+			#version 410 core
+			
+			layout(location=0) in vec3 a_Position;
+			uniform mat4 u_Transformation;
+			uniform mat4 u_ProjectionViewMatrix;
+			
+			void main(){
+				gl_Position =  u_ProjectionViewMatrix * (u_Transformation * vec4(a_Position, 1.0));
+			}
+		)";
+
+		std::string lightFragSrc = R"(
+			#version 410 core
+			
+			layout(location=0) out vec4 o_Color;
+			
+			void main(){
+				o_Color = vec4(1.0f);
+			}
+		)";
+
+		m_LightShader = Ref<Shader>(Shader::Create(lightVertSrc, lightFragSrc));
+
+		Ref<VertexBuffer> lightVB = Ref<VertexBuffer>(VertexBuffer::Create(&m_LightSource.GetVertexData()[0], m_LightSource.GetVetexDataSize()));
+		lightVB->SetLayout(m_LightShader->ExtractLayout());
+		m_LightVA->AddVertexBuffer(lightVB);
+
+		Ref<IndexBuffer> lightIB = Ref<IndexBuffer>(IndexBuffer::Create(&m_LightSource.GetIndexData()[0], m_LightSource.GetIndexCount()));
+		m_LightVA->SetIndexBuffer(lightIB);
+
+		m_LightShader->Bind();
+		m_LightShader->UploadUniform("u_Transformation", m_LightSource.GetModelMatrix());
+
+		// upload light color
+		m_SquareShader->Bind();
+		m_SquareShader->UploadUniform("u_LightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	}
 
 	// DEBUG MAT4
@@ -161,6 +241,7 @@ public:
 		RendererCommand::ClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 		Renderer::BeginScene(m_Camera);
 		Renderer::Submit(m_SquareShader, m_SquareVA, m_Texture);
+		Renderer::Submit(m_LightShader, m_LightVA);
 		Renderer::Submit(m_Shader, m_VertexArray);
 		Renderer::EndScene();
 	}
@@ -211,13 +292,17 @@ private:
 
 	Mesh m_Mesh;
 	Mesh m_Square;
+	Mesh m_LightSource;
 
-	std::shared_ptr<Texture> m_Texture;
-	std::shared_ptr<VertexArray> m_VertexArray;
-	std::shared_ptr<Shader> m_Shader;
+	Ref<Texture> m_Texture;
+	Ref<VertexArray> m_VertexArray;
+	Ref<Shader> m_Shader;
+	
+	Ref<VertexArray> m_SquareVA;
+	Ref<Shader> m_SquareShader;
 
-	std::shared_ptr<VertexArray> m_SquareVA;
-	std::shared_ptr<Shader> m_SquareShader;
+	Ref<VertexArray> m_LightVA;
+	Ref<Shader> m_LightShader;
 };
 
 
@@ -228,7 +313,7 @@ private:
 class App : public Application {
 public:
 	App() {
-		PushLayer(std::shared_ptr<ExampleLayer>(new ExampleLayer()));
+		PushLayer(Ref<ExampleLayer>(new ExampleLayer()));
 	}
 	~App() {
 

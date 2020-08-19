@@ -13,14 +13,14 @@ namespace rz {
 		void Bind() const override;
 		void Unbind() const override;
 
-		void AddVertexBuffer(VertexBufferPtr& vertexBuffer) override;
-		void SetIndexBuffer(IndexBufferPtr& indexBuffer) override;
+		void AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) override;
+		void SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer) override;
 
 		const VertexBufferList& GetVertexBuffers() const override { return m_VertexBuffers; }
-		const IndexBufferPtr& GetIndexBuffer() const override { return m_IndexBuffer; }
+		const Ref<IndexBuffer>& GetIndexBuffer() const override { return m_IndexBuffer; }
 	private:
 		unsigned int m_RendererID;
 		VertexBufferList m_VertexBuffers;
-		IndexBufferPtr m_IndexBuffer;
+		Ref<IndexBuffer> m_IndexBuffer;
 	};
 }

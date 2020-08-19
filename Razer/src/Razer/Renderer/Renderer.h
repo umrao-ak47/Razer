@@ -15,8 +15,8 @@ namespace rz {
 		static void BeginScene(const Camera& camera);
 		static void EndScene();
 
-		static void Submit(const std::shared_ptr<Shader>& shader, std::shared_ptr<VertexArray>& vertexArray, 
-			const std::shared_ptr<Texture>& texture = nullptr);
+		static void Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, 
+			const Ref<Texture>& texture = nullptr);
 
 		static RenderAPI::API GetAPI() { return RenderAPI::GetAPI(); }
 	private:

@@ -232,7 +232,7 @@ namespace rz {
 			elements.push_back(element);
 		}
 
-		m_Layout = std::shared_ptr<BufferLayout>(new BufferLayout(elements));
+		m_Layout = Ref<BufferLayout>(new BufferLayout(elements));
 	}
 
 	void OpenGLShader::ComputeUniformLayout() {
@@ -259,7 +259,7 @@ namespace rz {
 			elements.push_back(element);
 		}
 
-		m_UniformLayout = std::shared_ptr<UniformLayout>(new UniformLayout(elements));
+		m_UniformLayout = Ref<UniformLayout>(new UniformLayout(elements));
 	}
 }
 

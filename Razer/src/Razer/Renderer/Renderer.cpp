@@ -13,8 +13,8 @@ namespace rz {
 
 	}
 
-	void Renderer::Submit(const std::shared_ptr<Shader>& shader, std::shared_ptr<VertexArray>& vertexArray, 
-		const std::shared_ptr<Texture>& texture) {
+	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, 
+		const Ref<Texture>& texture) {
 		shader->Bind();
 		shader->UploadUniform("u_ProjectionViewMatrix", m_Data->ProjectionViewMatrix);
 		if (texture != nullptr) { texture->Bind(); }

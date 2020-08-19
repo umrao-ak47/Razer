@@ -15,6 +15,11 @@ namespace rz {
 			: m_Position(0.0f), m_Rotation(0.0f),
 			m_Scale(1.0f), m_ModelMatrix(1.0f) {}
 
+		Mesh(const Mesh& mesh)
+			: m_Verticies{mesh.m_Verticies}, m_Indicies{mesh.m_Indicies},
+			m_Position{mesh.m_Position}, m_Rotation{mesh.m_Rotation},
+			m_Scale{mesh.m_Scale}, m_ModelMatrix{mesh.m_ModelMatrix} {}
+
 		~Mesh() {}
 
 		const std::vector<float>& GetVertexData() const { return m_Verticies; }

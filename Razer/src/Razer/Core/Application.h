@@ -17,8 +17,8 @@ namespace rz {
 
 		void OnEvent(Event& e);
 
-		void PushLayer(const std::shared_ptr<Layer>& layer);
-		void PushOverlay(const std::shared_ptr<Layer>& overlay);
+		void PushLayer(const Ref<Layer>& layer);
+		void PushOverlay(const Ref<Layer>& overlay);
 
 		Window& GetWindow() { return *m_Window; }
 		static Application& Get() { return *s_Instance; }
@@ -27,9 +27,9 @@ namespace rz {
 		bool OnWindowResize(WindowResizeEvent& e);
 
 	private:
-		std::unique_ptr<Timer> m_Timer;
-		std::shared_ptr<ImguiLayer> m_ImguiLayer;
-		std::unique_ptr<Window> m_Window;
+		Scope<Timer> m_Timer;
+		Ref<ImguiLayer> m_ImguiLayer;
+		Scope<Window> m_Window;
 		bool m_Running;
 		LayerStack m_LayerStack;
 

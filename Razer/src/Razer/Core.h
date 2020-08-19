@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #ifdef RZ_PLATFORM_WINDOWS
 	#ifdef RZ_DYNAMIC_LINK
 		#ifdef RZ_BUILD_DLL
@@ -27,3 +29,11 @@
 #endif
 
 #define BIT(x) (1 << x)
+
+namespace rz{
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+}

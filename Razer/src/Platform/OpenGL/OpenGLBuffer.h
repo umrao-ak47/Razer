@@ -17,11 +17,11 @@ namespace rz {
 		void Unbind() const override;
 
 		virtual void SetLayout(const BufferLayout& layout) override { m_Layout = std::make_shared<BufferLayout>(layout); }
-		void SetLayout(const std::shared_ptr<BufferLayout>& layout) override { m_Layout = layout; }
+		void SetLayout(const Ref<BufferLayout>& layout) override { m_Layout = layout; }
 		const BufferLayout& GetLayout() const override { return *m_Layout; }
 	private:
 		unsigned int m_RendererID;
-		std::shared_ptr<BufferLayout> m_Layout;
+		Ref<BufferLayout> m_Layout;
 	};
 
 

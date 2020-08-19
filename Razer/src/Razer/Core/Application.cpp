@@ -17,10 +17,10 @@ namespace rz {
 		RZ_CORE_ASSERT(!s_Instance, "Application Already exists");
 		s_Instance = this;
 
-		m_Window = std::unique_ptr<Window>(Window::Create());
+		m_Window = Scope<Window>(Window::Create());
 		m_Window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 
-		m_ImguiLayer = std::shared_ptr<ImguiLayer>(new ImguiLayer());
+		m_ImguiLayer = Ref<ImguiLayer>(new ImguiLayer());
 		PushOverlay(m_ImguiLayer);
 
 		m_Timer = std::unique_ptr<Timer>(Timer::Get());
@@ -66,12 +66,12 @@ namespace rz {
 		}
 	}
 
-	void Application::PushLayer(const std::shared_ptr<Layer>& layer) {
+	void Application::PushLayer(const Ref<Layer>& layer) {
 		m_LayerStack.PushLayer(layer);
 		layer->OnAttach();
 	}
 
-	void Application::PushOverlay(const std::shared_ptr<Layer>& overlay) {
+	void Application::PushOverlay(const Ref<Layer>& overlay) {
 		m_LayerStack.PushOverlay(overlay);
 		overlay->OnAttach();
 	}
