@@ -1,10 +1,12 @@
 #pragma once
 
 #include "Razer/Renderer/Shader.h"
+#include <glad/glad.h>
 
 namespace rz {
 	class OpenGLShader : public Shader {
 	public:
+		OpenGLShader(const std::string& filepath);
 		OpenGLShader(const std::string& vertSrc, const std::string& fragSrc);
 		~OpenGLShader();
 
@@ -20,8 +22,11 @@ namespace rz {
 		const Ref<BufferLayout>& ExtractLayout() const override { return m_Layout; }
 		const Ref<UniformLayout>& ExtractUniformLayout() const override { return m_UniformLayout; }
 	private:
-		void Init(const std::string& vertSrc, const std::string& fragSrc);
-		
+		std::string ReadFile(const std::string& filepath);
+		std::vector<std::pair<GLuint, std::string>> ProcessSourceData(const std::string& source);
+
+		void Compile(const std::vector<std::pair<GLuint, std::string>>& sources);
+
 		void ComputeLayout();
 		void ComputeUniformLayout();
 
