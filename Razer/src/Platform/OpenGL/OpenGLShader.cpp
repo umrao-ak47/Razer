@@ -42,18 +42,33 @@ namespace rz {
 	static inline std::string& Trim(std::string& str) {
 		const std::string ws = " \t\n\r\f\v";
 		// right trim
-		str.erase(str.find_first_not_of(ws));
-		// left trim
 		str.erase(str.find_last_not_of(ws) + 1);
+		// left trim
+		str.erase(0, str.find_first_not_of(ws));
+		RZ_CORE_INFO("{0}", str);
 		return str;
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& filepath) {
 		std::string shaderSource = ReadFile(filepath);
 		Compile(ProcessSourceData(shaderSource));
+		// Extract name from file name
+		size_t lastSlash = filepath.find_last_of("/\\");
+		lastSlash = (lastSlash == std::string::npos) ? 0 : lastSlash + 1;
+		size_t lastDot = filepath.rfind(".");
+		size_t count = (lastDot == std::string::npos) ? filepath.size() - lastSlash : lastDot - lastSlash;
+		m_Name = filepath.substr(lastSlash, count);
+		RZ_CORE_TRACE(m_Name);
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& vertSrc, const std::string& fragSrc) {
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& filepath)
+		: m_Name{name} {
+		std::string shaderSource = ReadFile(filepath);
+		Compile(ProcessSourceData(shaderSource));
+	}
+
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertSrc, const std::string& fragSrc)
+		: m_Name{name} {
 		std::vector<std::pair<GLuint, std::string>> shaderSources;
 		shaderSources.push_back(std::make_pair(GL_VERTEX_SHADER, vertSrc));
 		shaderSources.push_back(std::make_pair(GL_FRAGMENT_SHADER, fragSrc));
@@ -74,7 +89,7 @@ namespace rz {
 
 	std::string OpenGLShader::ReadFile(const std::string& filepath) {
 		std::string result;
-		std::ifstream in(filepath, std::ios::in, std::ios::binary);
+		std::ifstream in(filepath, std::ios::in | std::ios::binary);
 		if (in) {
 			in.seekg(0, std::ios::end);
 			result.resize(in.tellg());
@@ -97,12 +112,11 @@ namespace rz {
 		size_t pos = source.find(token, 0);
 		while (pos != std::string::npos) {
 			size_t eol = source.find_first_of("\r\n", pos);
-			RZ_CORE_ASSERT(eol != std::string::npos, "Syntax Error");
 			size_t begin = pos + tokenLength;
 			GLuint type = StringToOpenGLShaderType(Trim(source.substr(begin, eol - begin)));
 
 			size_t nextLinePos = source.find_first_not_of(" \r\n", eol);
-			pos = source.find_first_of(token, nextLinePos);
+			pos = source.find(token, nextLinePos);
 			shaderSources.push_back(std::make_pair(type, source.substr(nextLinePos, pos - nextLinePos)));
 		}
 		return shaderSources;

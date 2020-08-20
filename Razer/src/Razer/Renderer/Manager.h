@@ -13,17 +13,4 @@ namespace rz {
 	private:
 		static std::vector<Ref<VertexArray>> m_Ojects;
 	};
-
-
-	class RZAPI ShaderManager {
-	public:
-		ShaderManager() {}
-		~ShaderManager() {}
-
-		static unsigned int Create(const std::string& vertSrc, const std::string& fragSrc);
-
-		static Ref<Shader> Get(unsigned int index) { return m_Objects.at(index); }
-	private:
-		static std::vector<Ref<Shader>> m_Objects;
-	};
 }

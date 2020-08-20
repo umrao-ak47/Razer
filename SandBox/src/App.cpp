@@ -12,6 +12,7 @@ class ExampleLayer : public Layer {
 public:
 	ExampleLayer()
 		: Layer("Example") {
+		m_ShaderManager = ShaderManager::GetManager();
 
 		std::vector<float> vertices = {
 			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
@@ -71,7 +72,7 @@ public:
 			}
 		)";
 
-		m_Shader = Ref<Shader>(Shader::Create(vertSrc, fragSrc));
+		m_Shader = m_ShaderManager->Load("triangle_shader", vertSrc, fragSrc);
 
 
 		std::vector<float> squareVertices = {
@@ -107,38 +108,8 @@ public:
 		m_Square.SetIndexData(squareIndices);
 		
 		m_SquareVA = Ref<VertexArray>(VertexArray::Create());
-		
-		// shader code
-		std::string squareVertSrc = R"(
-			#version 410 core
-			
-			layout(location=0) in vec3 a_Position;
-			layout(location=1) in vec2 a_TexCords;
-			uniform mat4 u_ProjectionViewMatrix;
-			
-			out vec2 v_TexCords;
-			
-			void main(){
-				gl_Position =  u_ProjectionViewMatrix * vec4(a_Position, 1.0);
-				v_TexCords = a_TexCords;
-			}
-		)";
 
-		std::string squareFragSrc = R"(
-			#version 410 core
-			
-			layout(location=0) out vec4 o_Color;
-			in vec2 v_TexCords;
-			uniform vec3 u_LightColor;
-			
-			uniform sampler2D u_Texture;
-			
-			void main(){
-				o_Color = vec4(u_LightColor, 1.0f) * texture(u_Texture, v_TexCords);
-			}
-		)";
-
-		m_SquareShader = Ref<Shader>(Shader::Create(squareVertSrc, squareFragSrc));
+		m_SquareShader = m_ShaderManager->Load("assets/shaders/Texture.glsl");
 
 		Ref<VertexBuffer> squareVB = Ref<VertexBuffer>(VertexBuffer::Create(&m_Square.GetVertexData()[0], m_Square.GetVetexDataSize()));
 		squareVB->SetLayout(m_SquareShader->ExtractLayout());
@@ -201,7 +172,7 @@ public:
 			}
 		)";
 
-		m_LightShader = Ref<Shader>(Shader::Create(lightVertSrc, lightFragSrc));
+		m_LightShader = m_ShaderManager->Load("light_shader", lightVertSrc, lightFragSrc);
 
 		Ref<VertexBuffer> lightVB = Ref<VertexBuffer>(VertexBuffer::Create(&m_LightSource.GetVertexData()[0], m_LightSource.GetVetexDataSize()));
 		lightVB->SetLayout(m_LightShader->ExtractLayout());
@@ -285,6 +256,7 @@ public:
 		return true;
 	}
 private:
+	Ref<ShaderManager> m_ShaderManager;
 	Camera m_Camera;
 	glm::vec4 m_SquareColor;
 	glm::mat4 m_Trans;

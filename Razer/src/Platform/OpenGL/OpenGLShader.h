@@ -7,8 +7,11 @@ namespace rz {
 	class OpenGLShader : public Shader {
 	public:
 		OpenGLShader(const std::string& filepath);
-		OpenGLShader(const std::string& vertSrc, const std::string& fragSrc);
+		OpenGLShader(const std::string& name, const std::string& filepath);
+		OpenGLShader(const std::string& name, const std::string& vertSrc, const std::string& fragSrc);
 		~OpenGLShader();
+
+		const std::string& GetName() const override { return m_Name; }
 
 		void Bind() const override;
 		void Unbind() const override;
@@ -33,6 +36,7 @@ namespace rz {
 		int ValidateUnform(const std::string& name, ShaderDataType type);
 	private:
 		unsigned int m_RendererID;
+		std::string m_Name;
 		Ref<UniformLayout> m_UniformLayout;
 		Ref<BufferLayout> m_Layout;
 	};
