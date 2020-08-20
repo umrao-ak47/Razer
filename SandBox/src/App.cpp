@@ -118,7 +118,7 @@ public:
 		Ref<IndexBuffer> squareIB = Ref<IndexBuffer>(IndexBuffer::Create(&m_Square.GetIndexData()[0], m_Square.GetIndexCount()));
 		m_SquareVA->SetIndexBuffer(squareIB);
 
-		m_Texture = Ref<Texture>(Texture::Create("D://imgs//deadpool_refrence.png", true));
+		m_Texture = Ref<Texture>(Texture::Create("assets/textures/deadpool_refrence.png", true));
 
 		m_Camera = Camera();
 		m_Camera.SetPosition(glm::vec3(0.0f, 0.0f, 2.0f));
