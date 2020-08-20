@@ -25,7 +25,7 @@ namespace rz {
 			case GL_FLOAT_MAT2:            return ShaderDataType::MAT2;
 			case GL_FLOAT_MAT3:            return ShaderDataType::MAT3;
 			case GL_FLOAT_MAT4:            return ShaderDataType::MAT4;
-			case GL_SAMPLER_2D:            return ShaderDataType::SAMPLER2D;
+			case GL_SAMPLER_2D:            return ShaderDataType::INT;
 		}
 		RZ_CORE_ASSERT(false, "This GLenum Type not supported");
 		return ShaderDataType::None;
@@ -45,7 +45,6 @@ namespace rz {
 		str.erase(str.find_last_not_of(ws) + 1);
 		// left trim
 		str.erase(0, str.find_first_not_of(ws));
-		RZ_CORE_INFO("{0}", str);
 		return str;
 	}
 
@@ -58,7 +57,6 @@ namespace rz {
 		size_t lastDot = filepath.rfind(".");
 		size_t count = (lastDot == std::string::npos) ? filepath.size() - lastSlash : lastDot - lastSlash;
 		m_Name = filepath.substr(lastSlash, count);
-		RZ_CORE_TRACE(m_Name);
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& filepath)

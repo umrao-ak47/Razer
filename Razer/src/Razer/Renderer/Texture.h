@@ -14,9 +14,9 @@ namespace rz {
 
 		virtual ~Texture() {}
 
-		virtual void Bind() const = 0;
+		virtual void Bind(unsigned int slot = 0) const = 0;
 		virtual void Unbind() const = 0;
 
-		static Texture* Create(const std::string& file, bool transparent= false);
+		static Texture* Create(const std::string& file);
 	};
 }

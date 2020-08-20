@@ -6,7 +6,7 @@
 #include <stb_image.h>
 
 namespace rz {
-	OpenGLTexture::OpenGLTexture(const std::string& file, bool transparent) {
+	OpenGLTexture::OpenGLTexture(const std::string& file) {
 		glGenTextures(1, &m_RendererID);
 		stbi_set_flip_vertically_on_load(true);
 		m_Image.data = stbi_load(file.c_str(), &m_Image.Width, &m_Image.Height,
@@ -37,15 +37,15 @@ namespace rz {
 		stbi_image_free(m_Image.data);
 	}
 
-	void OpenGLTexture::Bind() const {
-		glBindTexture(GL_TEXTURE_2D, m_RendererID);
+	void OpenGLTexture::Bind(unsigned int slot) const {
+		glBindTextureUnit(slot, m_RendererID);
 	}
 
 	void OpenGLTexture::Unbind() const {
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	void OpenGLTexture::Init(const std::string& file, bool transparent) {
+	void OpenGLTexture::Init(const std::string& file) {
 		
 	}
 }

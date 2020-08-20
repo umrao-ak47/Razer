@@ -118,7 +118,7 @@ public:
 		Ref<IndexBuffer> squareIB = Ref<IndexBuffer>(IndexBuffer::Create(&m_Square.GetIndexData()[0], m_Square.GetIndexCount()));
 		m_SquareVA->SetIndexBuffer(squareIB);
 
-		m_Texture = Ref<Texture>(Texture::Create("assets/textures/deadpool_refrence.png", true));
+		m_Texture = Ref<Texture>(Texture::Create("assets/textures/deadpool_refrence.png"));
 
 		m_Camera = Camera();
 		m_Camera.SetPosition(glm::vec3(0.0f, 0.0f, 2.0f));
@@ -187,6 +187,7 @@ public:
 		// upload light color
 		m_SquareShader->Bind();
 		m_SquareShader->UploadUniform("u_LightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+		m_SquareShader->UploadUniform("u_Texture", 0);
 	}
 
 	// DEBUG MAT4
@@ -211,7 +212,8 @@ public:
 
 		RendererCommand::ClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 		Renderer::BeginScene(m_Camera);
-		Renderer::Submit(m_SquareShader, m_SquareVA, m_Texture);
+		m_Texture->Bind();
+		Renderer::Submit(m_SquareShader, m_SquareVA);
 		Renderer::Submit(m_LightShader, m_LightVA);
 		Renderer::Submit(m_Shader, m_VertexArray);
 		Renderer::EndScene();

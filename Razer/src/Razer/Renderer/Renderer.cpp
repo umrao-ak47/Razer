@@ -13,11 +13,9 @@ namespace rz {
 
 	}
 
-	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, 
-		const Ref<Texture>& texture) {
+	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray) {
 		shader->Bind();
 		shader->UploadUniform("u_ProjectionViewMatrix", m_Data->ProjectionViewMatrix);
-		if (texture != nullptr) { texture->Bind(); }
 		vertexArray->Bind();
 		RendererCommand::DrawElements(vertexArray);
 	}

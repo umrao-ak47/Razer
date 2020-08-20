@@ -5,7 +5,7 @@
 #include "Platform/OpenGL/OpenGLTexture.h"
 
 namespace rz {
-	Texture* Texture::Create(const std::string& file, bool transparent)
+	Texture* Texture::Create(const std::string& file)
 	{
         switch (RenderAPI::GetAPI()) {
             case RenderAPI::API::None:
@@ -16,7 +16,7 @@ namespace rz {
 
             case RenderAPI::API::OpenGL:
             {
-                return new OpenGLTexture(file, transparent);
+                return new OpenGLTexture(file);
                 break;
             }
 
